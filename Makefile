@@ -94,8 +94,8 @@ SRC+=./USER/src/adc.c \
      ./USER/src/STM32_DELAY.c \
      ./USER/src/timer.c \
      ./USER/src/USART.c \
-     ./USER/src/printf.c \
-     ./USER/src/string.c
+     ./USER/src/printf.c 
+
 
 
   

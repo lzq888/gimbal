@@ -25,7 +25,7 @@ Description: This example shows how to use ADC function to capture 1 channel ana
 #include <stdlib.h>
 #include "bool.h"
 #include "printf.h"
-#include "string.h"
+
 
 
 
@@ -57,9 +57,9 @@ typedef struct{
 }gps_buffers;
 
 typedef struct {
-    u16     	latitude_value;
-	u16     	longtitude_value;
-	u16     	height_value;
+    float     	latitude_value;
+	float     	longtitude_value;
+	float     	height_value;
 }gps_data;
 
 gps_flags 	gga_flags;
@@ -77,6 +77,23 @@ bool findGPGGA()
     }
 
         return FALSE;
+}
+
+void send_byte(uint8_t b)
+{
+	/* Send one byte */
+	USART_SendData(USART1, b);
+
+	/* Loop until USART2 DR register is empty */
+	while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
+}
+void send_string(uint8_t *str)
+{
+	while ((*str) != '\0') {
+
+		send_byte(*str);
+		str++;
+	}
 }
 	
  int main(void)
@@ -177,9 +194,9 @@ bool findGPGGA()
 					gga.longtitude_value=atof(gga_buffer.longtitude_string);
 					gga.height_value=atof(gga_buffer.height_string);
 
-					printf("latitude : %d\r\n",gga.latitude_value);
-					printf("longutitude : %d\r\n",gga.longtitude_value);
-					printf("height : %d\r\n",gga.height_value);
+					printf("latitude : %f\r\n",gga.latitude_value);
+					printf("longutitude : %f\r\n",gga.longtitude_value);
+					printf("height : %f\r\n",gga.height_value);
 				}
 				for(i=0;i<100;i++)
 				{	
