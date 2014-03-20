@@ -74,14 +74,11 @@ SRC+=$(ST_LIB)/src/misc.c \
 	$(ST_LIB)/src/stm32f10x_usart.c \
 	$(ST_LIB)/src/stm32f10x_wwdg.c 
 
-
 #MPU6050 Lib
 SRC+=./MPU6050_lib/MPU6050.c
 #Major programs
 SRC+=./main.c 
-
 #programs added
-
 SRC+=./USER/src/adc.c \
      ./USER/src/clock.c \
      ./USER/src/dma.c \
@@ -94,12 +91,8 @@ SRC+=./USER/src/adc.c \
      ./USER/src/STM32_DELAY.c \
      ./USER/src/timer.c \
      ./USER/src/USART.c \
-     ./USER/src/printf.c 
-
-
-
-  
-	 
+     ./USER/src/printf.c \
+     ./USER/src/gps_functions.c
 
 #======================================================================#
 #STM32 startup file
@@ -121,7 +114,7 @@ $(STARTUP_OBJ): $(STARTUP)
 	$(CC) $(CFLAGS) $^ -c $(STARTUP)
 
 $(EXECUTABLE):$(SRC) $(STARTUP_OBJ)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 #Make clean
 clean:

@@ -25,11 +25,9 @@ Description: This example shows how to use ADC function to capture 1 channel ana
 #include <stdlib.h>
 #include "bool.h"
 #include "printf.h"
+#include "gps_functions.h"
+#include <math.h>
 
-
-
-
- 
 //*********************************************************
 // Function: Main Program
 // Input:  N/A
@@ -57,14 +55,17 @@ typedef struct{
 }gps_buffers;
 
 typedef struct {
-    float     	latitude_value;
+	float     	latitude_value;
 	float     	longtitude_value;
 	float     	height_value;
 }gps_data;
 
-gps_flags 	gga_flags;
-gps_buffers gga_buffer;
-gps_data 	gga;
+
+gps_flags 		gga_flags;
+gps_buffers 	gga_buffer;
+gps_data 		gga;
+
+
 
 bool findGPGGA()
 {
@@ -100,10 +101,35 @@ void send_string(uint8_t *str)
 {
 	/*Initial STM32*/
 	Initial_MCU();
- 
+
+	u8 		lon[10]="12008.0000";
+	u8 		lad[10]="2303.00000";
+	float 	lon_v=0;
+	float 	lad_v=0;
+	float 	lon_radi=0;
+	float 	lad_radi=0;
+	float 	x=0;
+	float 	y=0;
+
 		
 	while(1)
 	{
+		lad_v=m2dec_lad(lad);
+		lon_v=m2dec_lon(lon);
+
+		printf("%f\r\n",lad_v);
+		printf("%f\r\n",lon_v);
+
+		lad_radi=degree2radians(lad_v);
+		lon_radi=degree2radians(lon_v);
+
+		printf("%f\r\n",lad_radi);
+		printf("%f\r\n",lon_radi);
+
+		gga2twd97(lad_radi,lon_radi,&x,&y);
+
+		printf("%f\r\n",x);
+		printf("%f\r\n",y);
 
 		/*get gps information*/
 		if(gps_buf!=0)
@@ -170,6 +196,7 @@ void send_string(uint8_t *str)
 						{/*get latitude and put in buffer*/
 							gga_buffer.latitude_string[a]=gga_buffer.gps_buf_checksum_string[i];
 							a++;
+
 						}
 						if(commond_count==4)
 						{/*get longtitude and put in buffer*/
@@ -190,8 +217,8 @@ void send_string(uint8_t *str)
 					commond_count=0;
 
 					/*convert string to value*/
-					gga.latitude_value=atof(gga_buffer.latitude_string);
-					gga.longtitude_value=atof(gga_buffer.longtitude_string);
+					gga.latitude_value=m2dec_lad(gga_buffer.latitude_string);
+					gga.longtitude_value=m2dec_lon(gga_buffer.longtitude_string);
 					gga.height_value=atof(gga_buffer.height_string);
 
 					printf("latitude : %f\r\n",gga.latitude_value);

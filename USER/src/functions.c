@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "functions.h"
 #include <string.h>
+#include "gps_functions.h"
 
 char  buffer[4];
 
@@ -124,6 +125,15 @@ char checksum(char* buffer)
             exor=exor^buffer[j];
         }
     return exor;
+}
+
+float degree2radians(float degree)
+{
+    float radians = 0;
+
+    radians = degree*pi/180;
+
+    return radians;
 }
 
         
