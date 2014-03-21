@@ -26,6 +26,7 @@ Description: This example shows how to use ADC function to capture 1 channel ana
 #include "bool.h"
 #include "printf.h"
 #include "gps_functions.h"
+#include "MPU6050.h"
 #include <math.h>
 
 //*********************************************************
@@ -35,8 +36,6 @@ Description: This example shows how to use ADC function to capture 1 channel ana
 // Remark: N/A
 //*********************************************************	 
 
-
-u16     	word_count=0;
 
 typedef struct{
 	u8      	gps_start_flag;
@@ -67,10 +66,25 @@ gps_data 		gga;
 float 	x=0;
 float 	y=0;
 float   z=0;
+u16     word_count=0;
+
+
+typedef struct {
+	int16_t 	buff[6];
+	float 		acc[3];
+	float   	gyro[3];
+}imu_buffer;
+
+imu_buffer   	mpu6050_buf;
+
+
+
+
+
 
 bool findGPGGA()
 {
-        
+       
     if(gga_buffer.gps_buf_string[0]=='G' && gga_buffer.gps_buf_string[1]=='P' && gga_buffer.gps_buf_string[2]=='G' && 
        gga_buffer.gps_buf_string[3]=='G' && gga_buffer.gps_buf_string[4]=='A')
     {
@@ -96,6 +110,11 @@ void send_string(uint8_t *str)
 		send_byte(*str);
 		str++;
 	}
+}
+
+void delay(uint32_t delay_count)
+{
+	while (delay_count) delay_count--;
 }
 	
  int main(void)
@@ -135,7 +154,6 @@ void send_string(uint8_t *str)
 
 		if(gga_flags.gps_info_flag!=0)
 		{
-			u16 	i=0;
 			u16 	commond_count=0;
 			/*check gpgga or not*/
 			if(findGPGGA())
@@ -144,7 +162,7 @@ void send_string(uint8_t *str)
 			}
 			else
 			{	
-				for(i=0;i<100;i++)
+				for(int i=0;i<100;i++)
 				gga_buffer.gps_buf_string[i]=0;
 
 			}
@@ -152,7 +170,7 @@ void send_string(uint8_t *str)
 			{	   	
 				/*yes! it is gpgga data*/
 
-				for(i=0;i<gga_flags.gps_word_count-5;i++)
+				for(int i=0;i<gga_flags.gps_word_count-5;i++)
 				{	
 					/*cut checksum value and \r\n*/	
 					gga_buffer.gps_buf_checksum_string[i]=gga_buffer.gps_buf_string[i];
@@ -164,7 +182,7 @@ void send_string(uint8_t *str)
 				{
 					/*yes! check data is right*/
 					int a=0;
-					for(i=0;i<gga_flags.gps_word_count-5;i++)
+					for(int i=0;i<gga_flags.gps_word_count-5;i++)
 					{		
 						
 						if(commond_count==2)
@@ -199,14 +217,14 @@ void send_string(uint8_t *str)
 					gga2twd97(degree2radians(m2dec_lad(gga_buffer.latitude_string)),degree2radians(m2dec_lon(gga_buffer.longtitude_string)),&x,&y);
 					z=gga.height_value;
 
-					printf("x : %f\r\n",x);
-					printf("y : %f\r\n",y);
-					printf("z : %f\r\n",z);
-					printf("latitude : %f\r\n",gga.latitude_value);
-					printf("longutitude : %f\r\n",gga.longtitude_value);
-					printf("height : %f\r\n",gga.height_value);
+					//printf("x : %f\r\n",x);
+					//printf("y : %f\r\n",y);
+					//printf("z : %f\r\n",z);
+					//printf("latitude : %f\r\n",gga.latitude_value);
+					//printf("longutitude : %f\r\n",gga.longtitude_value);
+					//printf("height : %f\r\n",gga.height_value);
 				}
-				for(i=0;i<100;i++)
+				for(int i=0;i<100;i++)
 				{	
 					gga_buffer.gps_buf_checksum_string[i]=0;
 					gga_buffer.gps_buf_string[i]=0;
@@ -217,6 +235,27 @@ void send_string(uint8_t *str)
 			gga_flags.gps_info_flag=0;
 			gga_flags.gps_word_count=0;
 		}
+				
+
+		MPU6050_GetRawAccelGyro(mpu6050_buf.buff);
+
+		for ( int i = 0; i<3; i++)
+			mpu6050_buf.acc[i] = (mpu6050_buf.buff[i]/16384.0);
+		for ( int i = 0; i<3; i++)
+			mpu6050_buf.gyro[i] = (mpu6050_buf.buff[i+2]/131.0);
+		printf("acc_x,%f,acc_y,%f,acc_z,%f,gyro_x,%f,gyro_y,%f,gyro_z,%f\r\n",
+			mpu6050_buf.acc[0], mpu6050_buf.acc[1], mpu6050_buf.acc[2],
+			mpu6050_buf.gyro[0], mpu6050_buf.gyro[1], mpu6050_buf.gyro[2]);
+		
+		delay(50000);
+
+
+
+
+
+
+
+
 
 
 	}
