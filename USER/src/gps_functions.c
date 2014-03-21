@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "gps_functions.h"
+#include "functions.h"
 #include <string.h>
 #include <math.h>
 
@@ -64,6 +65,7 @@ void gga2twd97(float lat,float lon,float *x,float *y)
 	float n  = 0;
 	float nu = 0;
 	float p  = 0;
+	float p1 = 0;
 	float A  = 0;
 	float B  = 0;
 	float C  = 0;
@@ -80,8 +82,9 @@ void gga2twd97(float lat,float lon,float *x,float *y)
 	e = sqrt(1 - pow(Polar_Radius/Equatorial_Radius,2) );
 	e2= pow(e,2)/(1-pow(e,2));
 	n = (Equatorial_Radius-Polar_Radius)/(Equatorial_Radius+Polar_Radius);
-	nu= Equatorial_Radius/sqrt(1-pow(e,2)*pow(sin(lat),2));
-	p = lon-long0;
+	nu= Equatorial_Radius/sqrt( 1 - pow(e,2)*pow(sin(lat),2));
+	p1= degree2radians(long0);
+	p = lon-p1;
 	/*Calculate the Meridional Arc*/
 	A = Equatorial_Radius*(1 - n +(5/4.0)*(pow(n,2)-pow(n,3)) + (81/64.0)*(pow(n,4)-pow(n,5)));	 
 	// A = a*(1 - n + (5/4.0)*(n**2 - n**3) + (81/64.0)*(n**4  - n**5))

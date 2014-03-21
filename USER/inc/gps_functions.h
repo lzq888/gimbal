@@ -3,12 +3,12 @@
 #include <math.h>
 #include "alientek.h"
 
-#define 	pi 					3.1415926 
-#define 	Equatorial_Radius 	6378137
-#define 	Polar_Radius 	    6356752.314245
-#define 	long0 	    		121
-#define 	k0 	    		    0.9999
-#define     dx                  250000
+#define 	pi 					3.1415926f 
+#define 	Equatorial_Radius 	6378137.0f
+#define 	Polar_Radius 	    6356752.314245f
+#define 	long0 	    		121.0f
+#define 	k0 	    		    0.9999f
+#define     dx                  250000.0f
 
 
 float m2dec_lad(char* buffer);
