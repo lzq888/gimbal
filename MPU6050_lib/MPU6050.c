@@ -29,10 +29,8 @@ THE SOFTWARE.
 */
 
 /* Includes */
-#include "bool.h"
 #include "MPU6050.h"
 #include "stm32f10x_i2c.h"
-
 
 /** @defgroup MPU6050_Library
 * @{
@@ -233,6 +231,18 @@ void MPU6050_GetRawAccelGyro(s16* AccelGyro)
 
 }
 
+
+void MPU6050_GetRawmagne(s16* magne) 
+{
+    u8 tmpBuffer[6]; 
+    MPU6050_I2C_BufferRead(MPU6050_DEFAULT_ADDRESS, tmpBuffer, MPU9150_RA_magne_XOUT_L, 6); 
+    /* Get acceleration */
+    for(int i=0; i<3; i++) 
+      magne[i]=((s16)((u16)tmpBuffer[2*i+1] << 8) + tmpBuffer[2*i]);       
+
+}
+
+
 /** Write multiple bits in an 8-bit device register.
  * @param slaveAddr I2C slave device address
  * @param regAddr Register regAddr to write to
@@ -321,6 +331,7 @@ void MPU6050_I2C_Init()
   /* Enable I2C and GPIO clocks */
   RCC_APB1PeriphClockCmd(MPU6050_I2C_RCC_Periph, ENABLE);
   RCC_APB2PeriphClockCmd(MPU6050_I2C_RCC_Port, ENABLE);
+  
 
   /* Configure I2C pins: SCL and SDA */
   GPIO_InitStructure.GPIO_Pin =  MPU6050_I2C_SCL_Pin | MPU6050_I2C_SDA_Pin; 

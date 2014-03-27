@@ -73,9 +73,12 @@ typedef struct {
 	int16_t 	buff[6];
 	float 		acc[3];
 	float   	gyro[3];
+	int16_t 	magne[3];
+
 }imu_buffer;
 
 imu_buffer   	mpu6050_buf;
+	
 
 
 
@@ -122,9 +125,13 @@ void delay(uint32_t delay_count)
 	/*Initial STM32*/
 	Initial_MCU();
 
+
 	while(1)
 	{
+
+		
 	/*	
+
 		/*get gps information*/
 		if(gps_buf!=0)
 		{	
@@ -238,7 +245,8 @@ void delay(uint32_t delay_count)
 				
 
 		MPU6050_GetRawAccelGyro(mpu6050_buf.buff);
-
+		MPU6050_GetRawmagne(mpu6050_buf.magne);
+	
 		for ( int i = 0; i<3; i++)
 			mpu6050_buf.acc[i] = (mpu6050_buf.buff[i]/16384.0);
 		for ( int i = 0; i<3; i++)
@@ -246,7 +254,10 @@ void delay(uint32_t delay_count)
 		printf("acc_x,%f,acc_y,%f,acc_z,%f,gyro_x,%f,gyro_y,%f,gyro_z,%f\r\n",
 			mpu6050_buf.acc[0], mpu6050_buf.acc[1], mpu6050_buf.acc[2],
 			mpu6050_buf.gyro[0], mpu6050_buf.gyro[1], mpu6050_buf.gyro[2]);
-		
+
+		printf("mag_x,%f,mag_y,%f,mag_z,%f\r\n",
+			mpu6050_buf.magne[0], mpu6050_buf.magne[1], mpu6050_buf.magne[2]);
+
 		delay(50000);
 
 

@@ -37,11 +37,11 @@ THE SOFTWARE.
 
  /* Includes */
 #include "HAL_MPU6050.h" 
-
+#include "bool.h"
 #define MPU6050_ADDRESS_AD0_LOW     0x68 // address pin low (GND), default for InvenSense evaluation board
 #define MPU6050_ADDRESS_AD0_HIGH    0x69 // address pin high (VCC)
 #define MPU6050_DEFAULT_ADDRESS     (MPU6050_ADDRESS_AD0_LOW<<1)
-
+/*
 #define MPU6050_RA_XG_OFFS_TC       0x00 //[7] PWR_MODE, [6:1] XG_OFFS_TC, [0] OTP_BNK_VLD
 #define MPU6050_RA_YG_OFFS_TC       0x01 //[7] PWR_MODE, [6:1] YG_OFFS_TC, [0] OTP_BNK_VLD
 #define MPU6050_RA_ZG_OFFS_TC       0x02 //[7] PWR_MODE, [6:1] ZG_OFFS_TC, [0] OTP_BNK_VLD
@@ -54,6 +54,14 @@ THE SOFTWARE.
 #define MPU6050_RA_YA_OFFS_L_TC     0x09
 #define MPU6050_RA_ZA_OFFS_H        0x0A //[15:0] ZA_OFFS
 #define MPU6050_RA_ZA_OFFS_L_TC     0x0B
+*/
+#define MPU9150_RA_magne_XOUT_L     0x03
+#define MPU9150_RA_magne_XOUT_H     0x04
+#define MPU9150_RA_magne_YOUT_L     0x05
+#define MPU9150_RA_magne_YOUT_H     0x06
+#define MPU9150_RA_magne_ZOUT_L     0x07
+#define MPU9150_RA_magne_ZOUT_H     0x08
+
 #define MPU6050_RA_XG_OFFS_USRH     0x13 //[15:0] XG_OFFS_USR
 #define MPU6050_RA_XG_OFFS_USRL     0x14
 #define MPU6050_RA_YG_OFFS_USRH     0x15 //[15:0] YG_OFFS_USR
@@ -410,6 +418,7 @@ void MPU6050_SetClockSource(uint8_t source);
 uint8_t MPU6050_GetDeviceID();
 
 void MPU6050_GetRawAccelGyro(s16* AccelGyro);
+void MPU6050_GetRawmagne(s16* AccelGyro);
 
 void MPU6050_WriteBits(uint8_t slaveAddr, uint8_t regAddr, uint8_t bitStart, uint8_t length, uint8_t data);
 void MPU6050_WriteBit(uint8_t slaveAddr, uint8_t regAddr, uint8_t bitNum, uint8_t data);

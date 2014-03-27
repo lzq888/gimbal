@@ -10,7 +10,7 @@ OBJCOPY=arm-none-eabi-objcopy
 
 #======================================================================#
 #Flags
-CFLAGS=-Wall -g -mlittle-endian -mthumb -std=c99
+CFLAGS= -g -mlittle-endian -mthumb -std=c99
 CFLAGS+=-mcpu=cortex-m3
 CFLAGS+=-D USE_STDPERIPH_DRIVER
 CFLAGS+=-I./
@@ -33,6 +33,7 @@ CFLAGS+=-I./
 CFLAGS+=-I./MPU6050_lib
 #Stm32 libraries
 ST_LIB=./lib/STM32F10x_StdPeriph_Driver
+ST_LIB_add=./STM32_MPU9150eMPL/Libraries
 
 #CMSIS libraries
 CFLAGS+=-I./lib/CMSIS/CM3/CoreSupport
@@ -40,10 +41,14 @@ CFLAGS+=-I./lib/CMSIS/CM3/CoreSupport
 #StdPeriph includes
 CFLAGS+=-I$(ST_LIB)/inc/
 CFLAGS+=-I./lib/CMSIS/CM3/DeviceSupport/ST/STM32F10x/
+CFLAGS+=-I$(ST_LIB_add)/STM32_CPAL_Driver/inc/
+CFLAGS+=-I$(ST_LIB_add)/STM32_CPAL_Driver/devices/stm32f10x/
 
 #programs added
 CFLAGS+=-I./USER/inc/
-CFLAGS+=-I./STM32_MPU9150eMPL/Libraries/CMSIS/Include/
+CFLAGS+=-I./STM32_MPU9150eMPL/Application/inc/
+#CFLAGS+=-I./STM32_MPU9150eMPL/Libraries/CMSIS/Include/
+
 #CFLAGS+=-I./adding/
 
 
@@ -72,7 +77,12 @@ SRC+=$(ST_LIB)/src/misc.c \
 	$(ST_LIB)/src/stm32f10x_spi.c \
 	$(ST_LIB)/src/stm32f10x_tim.c \
 	$(ST_LIB)/src/stm32f10x_usart.c \
-	$(ST_LIB)/src/stm32f10x_wwdg.c 
+	$(ST_LIB)/src/stm32f10x_wwdg.c \
+	$(ST_LIB_add)/STM32_CPAL_Driver/src/cpal_i2c.c \
+	$(ST_LIB_add)/STM32_CPAL_Driver/src/cpal_hal.c \
+	$(ST_LIB_add)/STM32_CPAL_Driver/src/cpal_usercallback_template.c \
+	$(ST_LIB_add)/STM32_CPAL_Driver/devices/stm32f10x/cpal_i2c_hal_stm32f10x.c
+    
 
 #MPU6050 Lib
 SRC+=./MPU6050_lib/MPU6050.c
@@ -92,7 +102,12 @@ SRC+=./USER/src/adc.c \
      ./USER/src/timer.c \
      ./USER/src/USART.c \
      ./USER/src/printf.c \
-     ./USER/src/gps_functions.c
+     ./USER/src/gps_functions.c \
+     ./STM32_MPU9150eMPL/Application/src/stm32_CPAL_mpu9150.c
+
+   
+
+
 
 #======================================================================#
 #STM32 startup file
