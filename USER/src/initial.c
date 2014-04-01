@@ -25,8 +25,6 @@ void Initial_MCU(void)
     EXTI_Configuration();
 	NVIC_Configuration();
 
-	//MPU9150_Config();
-
 	MPU6050_I2C_Init();
 	MPU6050_Initialize();
 

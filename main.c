@@ -27,6 +27,7 @@ Description: This example shows how to use ADC function to capture 1 channel ana
 #include "printf.h"
 #include "gps_functions.h"
 #include "MPU6050.h"
+#include "sensor.h"
 #include <math.h>
 
 //*********************************************************
@@ -71,16 +72,18 @@ u16     word_count=0;
 
 typedef struct {
 	int16_t 	buff[6];
+	int16_t 	magne[3];
 	float 		acc[3];
 	float   	gyro[3];
-	int16_t 	magne[3];
-
+	float       magn[3];
+	float       magn_correct[3];
 }imu_buffer;
 
-imu_buffer   	mpu6050_buf;
-	
+float 			acc_offset[3];
+float 			gyro_offset[3];
 
-
+imu_buffer   	mpu6050_buf;	
+uint8_t         tmp,tmp1,tmp2;
 
 
 
@@ -129,8 +132,7 @@ void delay(uint32_t delay_count)
 	while(1)
 	{
 
-		
-	/*	
+			
 
 		/*get gps information*/
 		if(gps_buf!=0)
@@ -242,23 +244,73 @@ void delay(uint32_t delay_count)
 			gga_flags.gps_info_flag=0;
 			gga_flags.gps_word_count=0;
 		}
-				
+		
 
-		MPU6050_GetRawAccelGyro(mpu6050_buf.buff);
-		MPU6050_GetRawmagne(mpu6050_buf.magne);
+		//tmp=MPU6050_check_bit_status (0x6A,5); 
+    	
+    	//MPU6050_ReadBit(MPU6050_DEFAULT_ADDRESS, 0x6A, 5, &tmp);
+    	//MPU6050_ReadBits(MPU6050_DEFAULT_ADDRESS, 0x6A, 7, 7, &tmp);
+    	//mpu6050_buf.id=MPU6050_GetDeviceID();
+    	//MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ST1,7, 8, &tmp1);
+    	//delay(100);
+    	//MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_HZH ,7, 8, &tmp2);
+    	//delay(100);
+		//printf("tmp1,%d\r\n",tmp1);
+		//printf("tmp2,%d\r\n",tmp2);
+
+		MPU6050_GetRawAccelGyro(mpu6050_buf.buff,mpu6050_buf.magne);
+		delay(100);
+		for ( int i = 0; i<3; i++)
+			mpu6050_buf.acc[i] = (mpu6050_buf.buff[i]/8192.0);//16384//8192
+		for ( int i = 0; i<3; i++)
+			mpu6050_buf.gyro[i] = (mpu6050_buf.buff[i+3]/16.4);//131/16.4
+		for ( int i = 0; i<3; i++)
+			mpu6050_buf.magn[i] = (mpu6050_buf.magne[i]/1.0);//16384//8192
+		for ( int i = 0; i<3; i++)
+			mpu6050_buf.magn_correct[i] = (mpu6050_buf.magne[i+3]/1.0);//16384//8192
 	
+		/*correlation*/
+		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAX,7, 8, &tmp);
+		mpu6050_buf.magn_correct[0]=tmp;
+		delay(10);
+    	MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAY,7, 8, &tmp);
+		mpu6050_buf.magn_correct[1]=tmp;
+		delay(10);
+		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAZ,7, 8, &tmp);
+		mpu6050_buf.magn_correct[2]=tmp;
+		delay(10);
+
+		mpu6050_buf.magn_correct[0]=magne_correction(mpu6050_buf.magn_correct[0]);
+		mpu6050_buf.magn_correct[1]=magne_correction(mpu6050_buf.magn_correct[1]);
+		mpu6050_buf.magn_correct[2]=magne_correction(mpu6050_buf.magn_correct[2]);
+		
+		if(acc_gyro_correction_status()==FALSE && correlation_flag==0)
+		{
+			  
+			for ( int i = 0; i<3; i++)
+			acc_offset[i] = mpu6050_buf.acc[i];
+			for ( int i = 0; i<3; i++)
+			gyro_offset[i] = mpu6050_buf.gyro[i];
+			acc_gyro_correction_offset(&(acc_offset),&(gyro_offset));
+		}
+
 		for ( int i = 0; i<3; i++)
-			mpu6050_buf.acc[i] = (mpu6050_buf.buff[i]/16384.0);
+			mpu6050_buf.acc[i] -= acc_offset[i] ;//16384//8192
 		for ( int i = 0; i<3; i++)
-			mpu6050_buf.gyro[i] = (mpu6050_buf.buff[i+2]/131.0);
-		printf("acc_x,%f,acc_y,%f,acc_z,%f,gyro_x,%f,gyro_y,%f,gyro_z,%f\r\n",
+			mpu6050_buf.gyro[i] -= gyro_offset[i];//131/16.4
+		for ( int i = 0; i<3; i++)
+			mpu6050_buf.magn[i] *= mpu6050_buf.magn_correct[i];//131/16.4
+
+		/*correlation done*/
+
+				
+		printf("acc_x,%f,acc_y,%f,acc_z,%f,gyro_x,%f,gyro_y,%f,gyro_z,%f\r\n mag_x,%f,mag_y,%f,mag_z,%f\r\n",
 			mpu6050_buf.acc[0], mpu6050_buf.acc[1], mpu6050_buf.acc[2],
-			mpu6050_buf.gyro[0], mpu6050_buf.gyro[1], mpu6050_buf.gyro[2]);
+			mpu6050_buf.gyro[0], mpu6050_buf.gyro[1], mpu6050_buf.gyro[2],	
+			mpu6050_buf.magn[0], mpu6050_buf.magn[1], mpu6050_buf.magn[2]);
+		
+		delay(100);
 
-		printf("mag_x,%f,mag_y,%f,mag_z,%f\r\n",
-			mpu6050_buf.magne[0], mpu6050_buf.magne[1], mpu6050_buf.magne[2]);
-
-		delay(50000);
 
 
 

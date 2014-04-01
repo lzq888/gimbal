@@ -116,3 +116,8 @@ void gga2twd97(float lat,float lon,float *x,float *y)
 	// y = K1 + K2*(p**2) + K3*(p**4)
 }
 
+
+
+
+
+

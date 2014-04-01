@@ -31,6 +31,8 @@ THE SOFTWARE.
 /* Includes */
 #include "MPU6050.h"
 #include "stm32f10x_i2c.h"
+#include "printf.h"
+#include <stdlib.h>
 
 /** @defgroup MPU6050_Library
 * @{
@@ -45,12 +47,31 @@ THE SOFTWARE.
  */
 void MPU6050_Initialize() 
 {
+    MPU6050_SetSleepModeStatus(DISABLE);
+    delay(100);
     MPU6050_SetClockSource(MPU6050_CLOCK_PLL_XGYRO);
-    MPU6050_SetFullScaleGyroRange(MPU6050_GYRO_FS_250);
-    MPU6050_SetFullScaleAccelRange(MPU6050_ACCEL_FS_2);
-    MPU6050_SetSleepModeStatus(DISABLE); 
+    delay(100);
+    MPU6050_Config(0x03);
+    delay(100);
+    MPU6050_SetFullScaleGyroRange(MPU6050_GYRO_FS_2000);
+    delay(100);
+    MPU6050_SetFullScaleAccelRange(MPU6050_ACCEL_FS_4);
+    delay(100);   
+    MPU6050_enablemagnetometer();
+    delay(100);
+    
+
 }
 
+bool MPU6050_check_bit_status (uint8_t regAddr,uint8_t bitNum) 
+{
+    uint8_t tmp;
+    MPU6050_ReadBit(MPU6050_DEFAULT_ADDRESS, regAddr, bitNum, &tmp);
+    if(tmp == 0x00)
+      return FALSE;
+    else
+      return TRUE;    
+}
 /** Verify the I2C connection.
  * Make sure the device is connected and responds as expected.
  * @return True if connection is valid, FALSE otherwise
@@ -111,7 +132,18 @@ void MPU6050_SetClockSource(uint8_t source)
 {
     MPU6050_WriteBits(MPU6050_DEFAULT_ADDRESS, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_CLKSEL_BIT, MPU6050_PWR1_CLKSEL_LENGTH, source);
 }
+/*
 
+
+
+
+
+
+*/
+void MPU6050_Config(uint8_t source) 
+{
+    MPU6050_WriteBits(MPU6050_DEFAULT_ADDRESS, MPU6050_RA_CONFIG, 2, 3, source);
+}
 /** Set full-scale gyroscope range.
  * @param range New full-scale gyroscope range value
  * @see MPU6050_GetFullScaleGyroRange()
@@ -167,6 +199,7 @@ uint8_t MPU6050_GetFullScaleGyroRange()
  * @see MPU6050_ACONFIG_AFS_SEL_BIT
  * @see MPU6050_ACONFIG_AFS_SEL_LENGTH
  */
+
 uint8_t MPU6050_GetFullScaleAccelRange() 
 {
     uint8_t tmp;
@@ -181,6 +214,63 @@ void MPU6050_SetFullScaleAccelRange(uint8_t range)
 {
     MPU6050_WriteBits(MPU6050_DEFAULT_ADDRESS, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_AFS_SEL_BIT, MPU6050_ACONFIG_AFS_SEL_LENGTH, range);
 }
+/** Get full-scale magnetometer range.
+ * The FS_SEL parameter allows setting the full-scale range of the accelerometer
+ * sensors, as described in the table below.
+ *
+ * <pre>
+ * 0 = +/- 2g
+ * 1 = +/- 4g
+ * 2 = +/- 8g
+ * 3 = +/- 16g
+ * </pre>
+ *
+ * @return Current full-scale accelerometer range setting
+ * @see MPU6050_ACCEL_FS_2
+ * @see MPU6050_RA_ACCEL_CONFIG
+ * @see MPU6050_ACONFIG_AFS_SEL_BIT
+ * @see MPU6050_ACONFIG_AFS_SEL_LENGTH
+ */
+
+  void MPU6050_enablemagnetometer()  
+{
+    //MPU6050_WriteBits(MPU6050_DEFAULT_ADDRESS,0x24, 7,8, 0x40);
+    //delay(100);
+    MPU6050_WriteBits(MPU6050_DEFAULT_ADDRESS,0x37, 7,8, 0x32);
+    delay(100);
+    MPU6050_WriteBit(MPU6050_DEFAULT_ADDRESS, 0x6A, 5,DISABLE);
+    delay(100);
+    MPU6050_WriteBits(AK8975_I2C_ADDR,AK8975_CNTL, 3,4, 0x0F);
+    delay(100);
+    MPU6050_WriteBits(AK8975_I2C_ADDR,AK8975_CNTL, 3,4, 0x0F);
+    delay(100);
+    
+
+    MPU6050_WriteBits(AK8975_I2C_ADDR,AK8975_CNTL, 3,4, 0x0F);
+    delay(100);
+    MPU6050_WriteBits(AK8975_I2C_ADDR,AK8975_CNTL, 3,4, 0x00);
+    delay(100);
+    MPU6050_WriteBits(AK8975_I2C_ADDR,AK8975_CNTL, 3,4, 0x01);
+    delay(100);
+
+}
+
+
+uint8_t MPU6050_GetFullScalemagnetometerRange() 
+{
+    uint8_t tmp;
+    MPU6050_ReadBits(MPU6050_DEFAULT_ADDRESS, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_AFS_SEL_BIT, MPU6050_ACONFIG_AFS_SEL_LENGTH, &tmp);
+    return tmp;
+}
+/** Set full-scale accelerometer range.
+ * @param range New full-scale accelerometer range setting
+ * @see MPU6050_GetFullScaleAccelRange()
+ */
+void MPU6050_SetFullScalemagnetometerRange(uint8_t range) 
+{
+    MPU6050_WriteBits(MPU6050_DEFAULT_ADDRESS, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_AFS_SEL_BIT, MPU6050_ACONFIG_AFS_SEL_LENGTH, range);
+}
+
 
 /** Get sleep mode status.
  * Setting the SLEEP bit in the register puts the device into very low power
@@ -218,29 +308,31 @@ void MPU6050_SetSleepModeStatus(FunctionalState NewState)
  * @param AccelGyro 16-bit signed integer array of length 6
  * @see MPU6050_RA_ACCEL_XOUT_H
  */
-void MPU6050_GetRawAccelGyro(s16* AccelGyro) 
+void MPU6050_GetRawAccelGyro(s16* AccelGyro,s16* Magne) 
 {
-    u8 tmpBuffer[14]; 
-    MPU6050_I2C_BufferRead(MPU6050_DEFAULT_ADDRESS, tmpBuffer, MPU6050_RA_ACCEL_XOUT_H, 14); 
+    u8 tmpBuffer_6050[14];
+    u8 tmpBuffer_8975[6];
+    u8 ReadData = 0x00; 
+    MPU6050_I2C_BufferRead(MPU6050_DEFAULT_ADDRESS, tmpBuffer_6050, MPU6050_RA_ACCEL_XOUT_H, 14); 
+    MPU6050_ReadBit(AK8975_I2C_ADDR, AK8975_ST1, 0, &ReadData);
+    
+    if (ReadData == 1) {
+    MPU6050_I2C_BufferRead(AK8975_I2C_ADDR, tmpBuffer_8975,AK8975_HXL, 6);
+    MPU6050_WriteBits(AK8975_I2C_ADDR,AK8975_CNTL, 3,4, 0x01);  // Set Single Measurement Mode
+    }
+
     /* Get acceleration */
     for(int i=0; i<3; i++) 
-      AccelGyro[i]=((s16)((u16)tmpBuffer[2*i] << 8) + tmpBuffer[2*i+1]);
-   /* Get Angular rate */
+      AccelGyro[i]=((s16)((u16)tmpBuffer_6050[2*i] << 8) + tmpBuffer_6050[2*i+1]);
+    /* Get Angular rate */
     for(int i=4; i<7; i++)
-      AccelGyro[i-1]=((s16)((u16)tmpBuffer[2*i] << 8) + tmpBuffer[2*i+1]);        
+      AccelGyro[i-1]=((s16)((u16)tmpBuffer_6050[2*i] << 8) + tmpBuffer_6050[2*i+1]);
+    /* Get magne rate */
+    for(int i=0; i<3; i++)
+      Magne[i]=((s16)((u16)tmpBuffer_8975[2*i+1] << 8) + tmpBuffer_8975[2*i]);
+  
+}  
 
-}
-
-
-void MPU6050_GetRawmagne(s16* magne) 
-{
-    u8 tmpBuffer[6]; 
-    MPU6050_I2C_BufferRead(MPU6050_DEFAULT_ADDRESS, tmpBuffer, MPU9150_RA_magne_XOUT_L, 6); 
-    /* Get acceleration */
-    for(int i=0; i<3; i++) 
-      magne[i]=((s16)((u16)tmpBuffer[2*i+1] << 8) + tmpBuffer[2*i]);       
-
-}
 
 
 /** Write multiple bits in an 8-bit device register.

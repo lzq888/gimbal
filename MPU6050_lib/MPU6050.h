@@ -34,14 +34,14 @@ THE SOFTWARE.
 #ifdef __cplusplus
  extern "C" {
 #endif 
-
+#include "printf.h"
  /* Includes */
 #include "HAL_MPU6050.h" 
 #include "bool.h"
 #define MPU6050_ADDRESS_AD0_LOW     0x68 // address pin low (GND), default for InvenSense evaluation board
 #define MPU6050_ADDRESS_AD0_HIGH    0x69 // address pin high (VCC)
 #define MPU6050_DEFAULT_ADDRESS     (MPU6050_ADDRESS_AD0_LOW<<1)
-/*
+
 #define MPU6050_RA_XG_OFFS_TC       0x00 //[7] PWR_MODE, [6:1] XG_OFFS_TC, [0] OTP_BNK_VLD
 #define MPU6050_RA_YG_OFFS_TC       0x01 //[7] PWR_MODE, [6:1] YG_OFFS_TC, [0] OTP_BNK_VLD
 #define MPU6050_RA_ZG_OFFS_TC       0x02 //[7] PWR_MODE, [6:1] ZG_OFFS_TC, [0] OTP_BNK_VLD
@@ -54,13 +54,34 @@ THE SOFTWARE.
 #define MPU6050_RA_YA_OFFS_L_TC     0x09
 #define MPU6050_RA_ZA_OFFS_H        0x0A //[15:0] ZA_OFFS
 #define MPU6050_RA_ZA_OFFS_L_TC     0x0B
-*/
-#define MPU9150_RA_magne_XOUT_L     0x03
-#define MPU9150_RA_magne_XOUT_H     0x04
-#define MPU9150_RA_magne_YOUT_L     0x05
-#define MPU9150_RA_magne_YOUT_H     0x06
-#define MPU9150_RA_magne_ZOUT_L     0x07
-#define MPU9150_RA_magne_ZOUT_H     0x08
+
+
+/*magne*/
+#define AK8975_I2C_ADDR     ((u8)0x18)
+#define AK8975_Device_ID    ((u8)0x48)
+
+#define AK8975_WIA          ((u8)0x00)
+#define AK8975_INFO         ((u8)0x01)
+#define AK8975_ST1          ((u8)0x02)
+#define AK8975_HXL          ((u8)0x03)
+#define AK8975_HXH          ((u8)0x04)
+#define AK8975_HYL          ((u8)0x05)
+#define AK8975_HYH          ((u8)0x06)
+#define AK8975_HZL          ((u8)0x07)
+#define AK8975_HZH          ((u8)0x08)
+#define AK8975_ST2          ((u8)0x09)
+#define AK8975_CNTL         ((u8)0x0A)
+#define AK8975_RSV          ((u8)0x0B)
+#define AK8975_ASTC         ((u8)0x0C)
+#define AK8975_TS1          ((u8)0x0D)
+#define AK8975_TS2          ((u8)0x0E)
+#define AK8975_I2CDIS       ((u8)0x0F)
+#define AK8975_ASAX         ((u8)0x10)
+#define AK8975_ASAY         ((u8)0x11)
+#define AK8975_ASAZ         ((u8)0x12)
+
+#define AK8975_1200uT       ((float)0.3f)  // 0.3 uT/LSB
+ 	
 
 #define MPU6050_RA_XG_OFFS_USRH     0x13 //[15:0] XG_OFFS_USR
 #define MPU6050_RA_XG_OFFS_USRL     0x14
@@ -401,6 +422,7 @@ THE SOFTWARE.
 
 
 void MPU6050_Initialize();
+bool MPU6050_check_bit_status (uint8_t regAddr,uint8_t bitNum) ;
 bool MPU6050_TestConnection();
 
 // GYRO_CONFIG register
@@ -409,16 +431,21 @@ void MPU6050_SetFullScaleGyroRange(uint8_t range);
 // ACCEL_CONFIG register
 uint8_t MPU6050_GetFullScaleAccelRange();
 void MPU6050_SetFullScaleAccelRange(uint8_t range);
+// magne_CONFIG register
+void MPU6050_enablemagnetometer();  
+uint8_t MPU6050_GetFullScalemagnetometerRange();
+void MPU6050_SetFullScalemagnetometerRange(uint8_t range) ;
 
 // PWR_MGMT_1 register
 bool MPU6050_GetSleepModeStatus();
 void MPU6050_SetSleepModeStatus(FunctionalState NewState);
 void MPU6050_SetClockSource(uint8_t source);
+void MPU6050_Config(uint8_t source) ;
 // WHO_AM_I register
 uint8_t MPU6050_GetDeviceID();
 
-void MPU6050_GetRawAccelGyro(s16* AccelGyro);
-void MPU6050_GetRawmagne(s16* AccelGyro);
+void MPU6050_GetRawAccelGyro(s16* AccelGyro,s16* Magne) ;
+
 
 void MPU6050_WriteBits(uint8_t slaveAddr, uint8_t regAddr, uint8_t bitStart, uint8_t length, uint8_t data);
 void MPU6050_WriteBit(uint8_t slaveAddr, uint8_t regAddr, uint8_t bitNum, uint8_t data);
