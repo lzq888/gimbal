@@ -20,13 +20,13 @@ void Initial_MCU(void)
 
 	USART_Config( USART1, 115200) ;  //for display on computer
 	USART_Config( USART2, 115200) ;  //for transmition
-	//USART_Config( USART3, 9600);     //for gps
+	USART_Config( USART3, 9600);     //for gps
 
     EXTI_Configuration();
 	NVIC_Configuration();
 
-	MPU6050_I2C_Init();
-	MPU6050_Initialize();
+	//MPU6050_I2C_Init();
+	//MPU6050_Initialize();
 
 
 }
