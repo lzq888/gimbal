@@ -17,18 +17,7 @@ void GPIO_Configuration(void)
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(LED2_Port, &GPIO_InitStructure);
   
-
- /* 定義PWM輸出腳位 */
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Mode = 	GPIO_Mode_AF_PP;
-	GPIO_InitStructure.GPIO_Pin = 	GPIO_Pin_9;		   	        // PWMOUT PB9
-	GPIO_Init(GPIOB, &GPIO_InitStructure);
-
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Mode = 	GPIO_Mode_AF_PP;
-	GPIO_InitStructure.GPIO_Pin = 	GPIO_Pin_8;		   	        // PWMOUT PB8
-	GPIO_Init(GPIOB, &GPIO_InitStructure);
-
+/*
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = 	GPIO_Mode_AF_PP;
 	GPIO_InitStructure.GPIO_Pin = 	GPIO_Pin_7;		   	        // PWMOUT PB 7
@@ -39,6 +28,18 @@ void GPIO_Configuration(void)
 	GPIO_InitStructure.GPIO_Pin = 	GPIO_Pin_6;		   	        // PWMOUT PB6
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
+
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = 	GPIO_Mode_AF_PP;
+	GPIO_InitStructure.GPIO_Pin = 	GPIO_Pin_9;		   	        
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = 	GPIO_Mode_AF_PP;
+	GPIO_InitStructure.GPIO_Pin = 	GPIO_Pin_8;		   	        
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+*/
+	/*exit*/
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;					//外部中   PB2
   	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
    	GPIO_Init(GPIOB, &GPIO_InitStructure);
@@ -57,4 +58,6 @@ void GPIO_Configuration(void)
 	GPIO_InitStructure.GPIO_Pin = 	GPIO_Pin_4|GPIO_Pin_10;		// KEY  PC4  PC10
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
 	GPIO_SetBits( GPIOC, GPIO_Pin_4|GPIO_Pin_10);
+
+
 }

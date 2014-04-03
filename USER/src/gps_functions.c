@@ -8,8 +8,11 @@
 
 gps_flags 		gga_flags;
 gps_buffers 	gga_buffer;
-gps_data 		gga;
 u16    			word_count=0;
+
+float 			x=0;
+float 			y=0;
+float   		z=0;
 
 float m2dec_lad(char* buffer)
 {
@@ -231,19 +234,27 @@ void get_gps_data()
 
 					gga2twd97(degree2radians(m2dec_lad(gga_buffer.latitude_string)),degree2radians(m2dec_lon(gga_buffer.longtitude_string)),&x,&y);
 					z=gga.height_value;
+					
+					gps.x=x;
+					gps.y=y;
+					gps.z=z;
 
-					printf("x : %f\r\n",x);
-					printf("y : %f\r\n",y);
-					printf("z : %f\r\n",z);
-					printf("latitude : %f\r\n",gga.latitude_value);
-					printf("longutitude : %f\r\n",gga.longtitude_value);
-					printf("height : %f\r\n",gga.height_value);
+					//printf("x : %f\r\n",gps.x);
+					//printf("y : %f\r\n",gps.y);
+					//printf("z : %f\r\n",gps.z);
+					//printf("latitude : %f\r\n",gga.latitude_value);
+					//printf("longutitude : %f\r\n",gga.longtitude_value);
+					//printf("height : %f\r\n",gga.height_value);
+					
+					
 				}
+				
 				for(int i=0;i<100;i++)
 				{	
 					gga_buffer.gps_buf_checksum_string[i]=0;
 					gga_buffer.gps_buf_string[i]=0;
 				}
+
 			gga_flags.gpgga_flag=0;
 			}
 

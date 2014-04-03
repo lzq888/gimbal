@@ -6,14 +6,13 @@
 #include "timer.h"
 #include "global.h"
 
-u16  timer_counter=0;
-u16  Mean_filter_output_last[4]={0,0,0,0};
 
+/*
 u16 	pwmvalue_a;
 u16 	pwmvalue_b;	
 u16 	pwmvalue_c;
 u16 	pwmvalue_d;
-
+*/
 void TIMER_Configuration(void)
 {
     TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;		
@@ -41,7 +40,7 @@ void TIMER_Configuration(void)
 	
 	/*72MHz/((4999+1)*(719+1))=20Hz*/																																																							
 }
-
+/*
 void PWMoutputA(u16 i) 													
 {
     TIM_OCInitTypeDef  TIM_OCInitStructure;
@@ -83,7 +82,7 @@ void PWMoutputD(u16 n)
 	TIM_OC1Init(TIM4, &TIM_OCInitStructure);         //TIM_OC3(channel~¬dªí
 	
 }
-
+*/
 void TIM3_IRQHandler(void)
 {
 	if(TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET) 
@@ -98,11 +97,9 @@ void TIM3_IRQHandler(void)
 void TIM4_IRQHandler(void)
 {
 	if(TIM_GetITStatus(TIM4, TIM_IT_Update) != RESET) 
-	{	 		  
-		
-	
-		TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
+	{	 		  		
 
+		TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
 	}
 }
 

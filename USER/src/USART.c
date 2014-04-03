@@ -14,7 +14,8 @@
 #include <string.h>
 #include "stm32f10x.h"
 #include "stm32f10x_conf.h"
-
+#include "bool.h"
+#include "gps_functions.h"
 
 u8	start_flag=0;
 	
@@ -130,7 +131,7 @@ void USART_Config(USART_TypeDef* USARTX, uint32_t BaudRate)
 		NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
 	}																																																																																						
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;																																												
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;																																												
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;																																												
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;																																												
 	NVIC_Init(&NVIC_InitStructure);	
 	
@@ -150,6 +151,8 @@ void USART_SendData_u8(USART_TypeDef* USARTx, u8 _Data)
 	USARTx->DR = _Data;
 	while((USARTx->SR&0X40)==0);  
 }
+
+
 void USART1_IRQHandler(void)                
 { 
 
@@ -193,7 +196,8 @@ void USART2_IRQHandler(void)
 void USART3_IRQHandler(void)                
 { 
 
-	u8 U3_RxData=0;
+	u8 		U3_RxData=0;
+//	u16 	length=0;
 
 	if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
 	{
@@ -201,11 +205,11 @@ void USART3_IRQHandler(void)
 		U3_RxData = USART_ReceiveData(USART3); //Get Data
 
 		gps_buf = U3_RxData;
-				
-	    //USART_SendData(USART1,U3_RxData); 	//Send back the Rx Data
 
-	  	//while(USART_GetFlagStatus(USART3, USART_FLAG_TC) == RESET)	;
+		get_gps_data();
+
 	}
+
 	else
 	{
 	U3_RxData =USART_ReceiveData(USART3); //Get Data Á×§K¦]¬°¹L¸ü¤¤Â_²£¥Í·í¾÷¦ý¬OÁÙ¬O¤£§¹¾ã                   

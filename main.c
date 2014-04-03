@@ -46,9 +46,25 @@ void delay(uint32_t delay_count)
 
 	while(1)
 	{
-		get_gps_data();
-		//mpu_9150_data();
-		//delay(100);
+		/*
+		if(gpgga_flag==1)
+		{
+			for(int i=0;i<buffer_length;i++)
+			{
+				USART_SendData(USART1,gps_buf_string[i]); 	
+	  			while(USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
+			}	
+
+			buffer_length=0;
+			gpgga_flag=0;
+		}
+		*/
+		//get_gps_data();
+		
+		mpu_9150_data();		
+		printf("acc_x,%f,acc_y,%f,acc_z,%f,gyro_x,%f,gyro_y,%f,gyro_z,%f\r\n mag_x,%f,mag_y,%f,mag_z,%f\r\n",
+			acc.x, acc.y, acc.z,gyr.x, gyr.y, gyr.z,mag.x, mag.y, mag.z);		
+			
 	}
 }
 
