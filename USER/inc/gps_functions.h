@@ -20,6 +20,13 @@ typedef struct{
 	u8      	height_string[10];
 }gps_buffers;
 
+typedef struct {
+	float     	latitude_value;
+	float     	longtitude_value;
+	float     	height_value;
+}gps_data;
+
+
 
 
 

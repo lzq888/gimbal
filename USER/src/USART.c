@@ -8,16 +8,11 @@
   ******************************************************************************
   */ 
 /*include header*/
-#include <stdlib.h>
-#include "USART.h"
-#include "global.h"
-#include <string.h>
-#include "stm32f10x.h"
-#include "stm32f10x_conf.h"
-#include "bool.h"
-#include "gps_functions.h"
 
-u8	start_flag=0;
+#include "config.h"
+
+
+
 	
 void USART_Config(USART_TypeDef* USARTX, uint32_t BaudRate)
 {
@@ -183,10 +178,9 @@ void USART2_IRQHandler(void)
 		U2_RxData = USART_ReceiveData(USART2); //Get Data
 		
 		timer_buf = U2_RxData;
+		
+		get_joystck_command();
 				
-	    //USART_SendData(USART2,U2_RxData); 	//Send back the Rx Data
-
-	  //while(USART_GetFlagStatus(USART2, USART_FLAG_TC) == RESET)	;
 	}
 	else
 	{
@@ -206,7 +200,7 @@ void USART3_IRQHandler(void)
 
 		gps_buf = U3_RxData;
 
-		get_gps_data();
+		//get_gps_data();
 
 	}
 

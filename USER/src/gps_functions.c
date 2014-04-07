@@ -8,7 +8,9 @@
 
 gps_flags 		gga_flags;
 gps_buffers 	gga_buffer;
+gps_data        gga;
 u16    			word_count=0;
+
 
 float 			x=0;
 float 			y=0;

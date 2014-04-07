@@ -19,7 +19,7 @@ void TIMER_Configuration(void)
 	
 						
     /*TIMER4 */	
-    TIM_TimeBaseStructure.TIM_Period =19999;			  			//period
+    TIM_TimeBaseStructure.TIM_Period =9999;			  			//period
   	TIM_TimeBaseStructure.TIM_Prescaler = 71;  						//high voltage portion(between 0-period)	
   	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
@@ -27,7 +27,7 @@ void TIMER_Configuration(void)
 	TIM_Cmd(TIM4, ENABLE);
 	TIM_ITConfig(TIM4, TIM_IT_Update, ENABLE);        				//enable timer interrupt
 	
-	/*72MHz/((19999+1)*(71+1))=50Hz*/	
+	/*72MHz/((9999+1)*(71+1))=100Hz*/	
 
     /*TIMER3 */	
     TIM_TimeBaseStructure.TIM_Period =4999;			  				//high voltage portion(between 0-period)
@@ -87,9 +87,9 @@ void TIM3_IRQHandler(void)
 {
 	if(TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET) 
 	{
+
 		
 		TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
-
 	}		
 }
 
@@ -98,6 +98,15 @@ void TIM4_IRQHandler(void)
 {
 	if(TIM_GetITStatus(TIM4, TIM_IT_Update) != RESET) 
 	{	 		  		
+		acc_time.x = acc.x;
+		acc_time.y = acc.y;
+		acc_time.z = acc.z;	
+		gyr_time.x = gyr.x;
+		gyr_time.y = gyr.y;
+		gyr_time.z = gyr.z;
+		mag_time.x = mag.x;
+		mag_time.y = mag.y;
+		mag_time.z = mag.z;
 
 		TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
 	}

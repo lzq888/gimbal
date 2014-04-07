@@ -104,7 +104,8 @@ SRC+=./USER/src/adc.c \
      ./USER/src/printf.c \
      ./USER/src/gps_functions.c \
      ./STM32_MPU9150eMPL/Application/src/stm32_CPAL_mpu9150.c \
-     ./USER/src/sensor.c 
+     ./USER/src/sensor.c \
+     ./USER/src/joystick_command.c 
 
 
    

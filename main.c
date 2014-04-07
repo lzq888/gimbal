@@ -15,6 +15,9 @@ Description: This example shows how to use ADC function to capture 1 channel ana
 // Output: N/A
 // Remark: N/A
 //*********************************************************	 
+float 	tempx;
+float 	tempy;
+float 	tempyaw;
 
 void send_byte(uint8_t b)
 {
@@ -61,10 +64,29 @@ void delay(uint32_t delay_count)
 		*/
 		//get_gps_data();
 		
-		mpu_9150_data();		
-		printf("acc_x,%f,acc_y,%f,acc_z,%f,gyro_x,%f,gyro_y,%f,gyro_z,%f\r\n mag_x,%f,mag_y,%f,mag_z,%f\r\n",
-			acc.x, acc.y, acc.z,gyr.x, gyr.y, gyr.z,mag.x, mag.y, mag.z);		
-			
+		//printf("x : %f\r\n",gps.x);
+		//printf("y : %f\r\n",gps.y);
+		//printf("z : %f\r\n",gps.z);
+		
+		
+		mpu_9150_data();						
+		//printf("acc_x,%f,acc_y,%f,acc_z,%f,gyro_x,%f,gyro_y,%f,gyro_z,%f\r\n mag_x,%f,mag_y,%f,mag_z,%f\r\n",
+		//acc_time.x, acc_time.y, acc_time.z,gyr_time.x, gyr_time.y, gyr_time.z,mag_time.x, mag_time.y, mag_time.z);		
+	
+		//ang.Pitch = toDeg(-asinf(acc.x));
+		//ang.Roll  = toDeg(atan2f(acc.y, acc.z));
+
+		//tempx = mag.x*cosf(ang.Pitch) + mag.y*sinf(ang.Pitch)*sinf(ang.Roll) - mag.z*sinf(ang.Pitch)*cosf(ang.Roll);
+		//tempy = mag.y*cosf(ang.Roll)  + mag.z*sinf(ang.Roll);
+
+		//ang.Yaw   = toDeg(atan2f(mag.x, mag.y));
+		//tempyaw	  = toDeg(atan2f(tempx, tempy));
+
+		//printf("Pitch,%f,Roll,%f,Yaw,%f\r\n",ang.Pitch, ang.Roll,ang.Yaw);		
+
+
+
+
 	}
 }
 
