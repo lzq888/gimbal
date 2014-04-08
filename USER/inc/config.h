@@ -24,5 +24,9 @@
 #include "sensor.h"
 #include <math.h>
 #include "joystick_command.h"
+#include "algorithm_moveAve.h"
+#include "stm32f10x.h"
+#include "stm32f10x_conf.h"
+
 
 #endif

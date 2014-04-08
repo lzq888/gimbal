@@ -45,6 +45,10 @@ void delay(uint32_t delay_count)
 {
 	/*Initial STM32*/
 	Initial_MCU();
+	initial_AccGyro();
+	DELAY_ms(1000);
+	initial_mag();	
+	DELAY_ms(5000);
 
 
 	while(1)
@@ -67,12 +71,14 @@ void delay(uint32_t delay_count)
 		//printf("x : %f\r\n",gps.x);
 		//printf("y : %f\r\n",gps.y);
 		//printf("z : %f\r\n",gps.z);
-		
-		
-		mpu_9150_data();						
-		//printf("acc_x,%f,acc_y,%f,acc_z,%f,gyro_x,%f,gyro_y,%f,gyro_z,%f\r\n mag_x,%f,mag_y,%f,mag_z,%f\r\n",
-		//acc_time.x, acc_time.y, acc_time.z,gyr_time.x, gyr_time.y, gyr_time.z,mag_time.x, mag_time.y, mag_time.z);		
 	
+		mpu_9150_data();
+		//printf("acc_x,%f,acc_y,%f,acc_z,%f,gyr_x,%f,gyr_y,%f,gyr_z,%f\r\n,mag_x,%f,mag_y,%f,mag_z,%f\r\n",
+			//acc_time.x,acc_time.y,acc_time.z,gyr_time.x,gyr_time.y,gyr_time.z,mag_time.x, mag_time.y, mag_time.z);							
+		printf("mag_x,%f,mag_y,%f,mag_z,%f\r\n",mag_time.x, mag_time.y, mag_time.z);		
+	
+
+
 		//ang.Pitch = toDeg(-asinf(acc.x));
 		//ang.Roll  = toDeg(atan2f(acc.y, acc.z));
 

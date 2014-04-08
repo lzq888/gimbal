@@ -139,6 +139,7 @@ void get_joystck_command()
 				{
 					strncpy(usart_data,input_buffer,sizeof(input_buffer));				//copy from input_buffer to usart_data
 					joystick_command(checksum_buff);
+					/*this command get the value(int) of joystick and save to global(joystick)*/
 /*
 					for(int j=0;j<length;j++)
 					{

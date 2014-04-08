@@ -10,10 +10,10 @@ typedef struct {
 	float       magn_correct[3];
 }imu_buffer;
 
-float magne_correction(float ASA);
-bool acc_gyro_correction_status();
-void acc_gyro_correction_offset(float* acc_offset,float* gyro_offsets);
-void mpu_9150_data();
-void sensor_correction();
+float 	magne_correction(float ASA);
+void 	initial_AccGyro();
+void 	initial_mag();
+void 	mpu_9150_data();
+void   	EllipseFitting(float *Ans, s16 *MagDataX, s16 *MagDataY, u8 Num);
 
 #endif

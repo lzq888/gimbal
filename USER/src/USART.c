@@ -200,7 +200,7 @@ void USART3_IRQHandler(void)
 
 		gps_buf = U3_RxData;
 
-		//get_gps_data();
+		get_gps_data();
 
 	}
 

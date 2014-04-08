@@ -47,9 +47,10 @@ CFLAGS+=-I$(ST_LIB_add)/STM32_CPAL_Driver/devices/stm32f10x/
 #programs added
 CFLAGS+=-I./USER/inc/
 CFLAGS+=-I./STM32_MPU9150eMPL/Application/inc/
+CFLAGS+=-I./adding/inc/
 #CFLAGS+=-I./STM32_MPU9150eMPL/Libraries/CMSIS/Include/
 
-#CFLAGS+=-I./adding/
+
 
 
 #======================================================================#
@@ -105,7 +106,9 @@ SRC+=./USER/src/adc.c \
      ./USER/src/gps_functions.c \
      ./STM32_MPU9150eMPL/Application/src/stm32_CPAL_mpu9150.c \
      ./USER/src/sensor.c \
-     ./USER/src/joystick_command.c 
+     ./USER/src/joystick_command.c \
+     ./adding/src/algorithm_moveAve.c 
+    
 
 
    
