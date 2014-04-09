@@ -18,5 +18,6 @@ char 		checksum(char* buffer);
 float 		degree2radians(float degree);
 void 		DELAY_ms(int ms);
 float 		arm_cos_f32(float x);
+float   	arm_sin_f32(float x);
 #endif
 

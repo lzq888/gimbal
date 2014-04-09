@@ -18,6 +18,11 @@ typedef struct {
 	float 		x;
 	float 		y;
 	float       z;
+	float 		EllipseSita;
+	float 		EllipseX0;
+	float 		EllipseY0;
+	float 		EllipseA;
+	float 		EllipseB;
 }sensor_magne;
 
 typedef struct {

@@ -101,7 +101,12 @@ void TIM4_IRQHandler(void)
 		gyr_time.z = gyr.z;
 		mag_time.x = mag.x;
 		mag_time.y = mag.y;
-		mag_time.z = mag.z;	
+		mag_time.z = mag.z;
+		mag_time.EllipseSita = mag.EllipseSita;
+		mag_time.EllipseX0 	 = mag.EllipseX0;
+		mag_time.EllipseY0   = mag.EllipseY0;
+		mag_time.EllipseA    = mag.EllipseA;
+		mag_time.EllipseB    = mag.EllipseB;
 		delay_buf++;
 
 		TIM_ClearITPendingBit(TIM4, TIM_IT_Update);

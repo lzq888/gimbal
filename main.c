@@ -46,10 +46,9 @@ void delay(uint32_t delay_count)
 	/*Initial STM32*/
 	Initial_MCU();
 	initial_AccGyro();
-	DELAY_ms(1000);
+	DELAY_ms(5000);
 	initial_mag();	
 	DELAY_ms(5000);
-
 
 	while(1)
 	{
@@ -73,9 +72,14 @@ void delay(uint32_t delay_count)
 		//printf("z : %f\r\n",gps.z);
 	
 		mpu_9150_data();
+		tempx = ((mag_time.x - mag_time.EllipseX0) * arm_cos_f32(mag_time.EllipseSita) - (mag_time.y - mag_time.EllipseY0) * arm_sin_f32(mag_time.EllipseSita)) / mag_time.EllipseA;
+		tempy = ((mag_time.x - mag_time.EllipseX0) * arm_sin_f32(mag_time.EllipseSita) + (mag_time.y - mag_time.EllipseY0) * arm_cos_f32(mag_time.EllipseSita)) / mag_time.EllipseB;
+		tempyaw	 = toDeg(atan2f(tempx, tempy));
+		//printf("mag_x,%f,mag_y,%f,yaw,%f\r\n",tempx, tempy,tempyaw);		
+		//printf("1,%f,2,%f,3,%f,4,%f,5,%f\r\n",mag_time.EllipseSita,mag_time.EllipseX0,mag_time.EllipseY0,mag_time.EllipseA,mag_time.EllipseB);
 		//printf("acc_x,%f,acc_y,%f,acc_z,%f,gyr_x,%f,gyr_y,%f,gyr_z,%f\r\n,mag_x,%f,mag_y,%f,mag_z,%f\r\n",
 			//acc_time.x,acc_time.y,acc_time.z,gyr_time.x,gyr_time.y,gyr_time.z,mag_time.x, mag_time.y, mag_time.z);							
-		printf("mag_x,%f,mag_y,%f,mag_z,%f\r\n",mag_time.x, mag_time.y, mag_time.z);		
+		//printf("mag_x,%f,mag_y,%f,mag_z,%f\r\n",mag_time.x, mag_time.y, mag_time.z);		
 	
 
 
@@ -86,7 +90,7 @@ void delay(uint32_t delay_count)
 		//tempy = mag.y*cosf(ang.Roll)  + mag.z*sinf(ang.Roll);
 
 		//ang.Yaw   = toDeg(atan2f(mag.x, mag.y));
-		//tempyaw	  = toDeg(atan2f(tempx, tempy));
+		
 
 		//printf("Pitch,%f,Roll,%f,Yaw,%f\r\n",ang.Pitch, ang.Roll,ang.Yaw);		
 

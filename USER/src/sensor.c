@@ -4,11 +4,13 @@ int 			i=0;
 float 			acc_offset[3];
 float 			gyro_offset[3];
 
+float 			Ellipse[5] = {0};
 imu_buffer   	mpu6050_buf;
 
 volatile int16_t MAG_FIFO[2][256] = {{0}};
 volatile int16_t MagDataX[8] = {0};
 volatile int16_t MagDataY[8] = {0};
+
 
 #define MagCorrect_time   100
 #define MagCorrect_Ave    10
@@ -392,6 +394,19 @@ void initial_mag()
 	{
 		printf("%d,%d\r\n",MagDataX[i],MagDataY[i]);
 	}
+
+	DELAY_ms(1000);
+
+	EllipseFitting(Ellipse, MagDataX, MagDataY, 8);
+
+	mag.EllipseSita = Ellipse[0];
+	mag.EllipseX0   = Ellipse[1];
+	mag.EllipseY0   = Ellipse[2];
+	mag.EllipseA    = Ellipse[3];
+	mag.EllipseB    = Ellipse[4];
+
+	printf("1,%f,2,%f,3,%f,4,%f,5,%f\r\n",mag.EllipseSita,mag.EllipseX0,mag.EllipseY0,mag.EllipseA,mag.EllipseB);
+
 	
 }
 
