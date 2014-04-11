@@ -21,14 +21,19 @@ u8      		correction_flag=0;
 sensor_acc		acc;
 sensor_gyro		gyr;
 sensor_magne    mag;
-sensor_acc		acc_time;
-sensor_gyro		gyr_time;
-sensor_magne    mag_time;
 
 
 /*for ahrs*/
 EulerAngle 		ang;
 Quaternion      qua;
+
+
+
+/*initial*/
+u8   			initial_flag=0;
+
+
+
 
 
 

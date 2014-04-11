@@ -107,6 +107,7 @@ SRC+=./USER/src/adc.c \
      ./STM32_MPU9150eMPL/Application/src/stm32_CPAL_mpu9150.c \
      ./USER/src/sensor.c \
      ./USER/src/joystick_command.c \
+     ./USER/src/ahrs.c \
      ./adding/src/algorithm_moveAve.c 
     
 

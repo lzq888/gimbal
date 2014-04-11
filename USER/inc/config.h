@@ -27,6 +27,7 @@
 #include "algorithm_moveAve.h"
 #include "stm32f10x.h"
 #include "stm32f10x_conf.h"
+#include "ahrs.h"
 
 
 #endif

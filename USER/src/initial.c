@@ -16,6 +16,9 @@ void Initial_MCU(void)
    	/*DMA Configuration*/
 	DMA1_Channel1_Configuration();
 
+	MPU6050_I2C_Init();
+	MPU6050_Initialize();
+
 	TIMER_Configuration();
 
 	USART_Config( USART1, 115200) ;  //for display on computer
@@ -25,8 +28,7 @@ void Initial_MCU(void)
     EXTI_Configuration();
 	NVIC_Configuration();
 
-	MPU6050_I2C_Init();
-	MPU6050_Initialize();
+	
 
 
 }

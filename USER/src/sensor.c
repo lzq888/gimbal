@@ -7,9 +7,16 @@ float 			gyro_offset[3];
 float 			Ellipse[5] = {0};
 imu_buffer   	mpu6050_buf;
 
+
+volatile int16_t ACC_FIFO[3][256] = {{0}};
+volatile int16_t GYR_FIFO[3][256] = {{0}};
+
 volatile int16_t MAG_FIFO[2][256] = {{0}};
+
 volatile int16_t MagDataX[8] = {0};
 volatile int16_t MagDataY[8] = {0};
+
+
 
 
 #define MagCorrect_time   100
@@ -34,35 +41,31 @@ void initial_AccGyro()
 	MPU6050_GetRawAccelGyro(mpu6050_buf.buff,mpu6050_buf.magne);
 	//delay(10);
 
-		acc.x = (mpu6050_buf.buff[0]/8192.0);//16384//8192
-		acc.y = (mpu6050_buf.buff[1]/8192.0);//16384//8192
-		acc.z = (mpu6050_buf.buff[2]/8192.0);//16384//8192
-		gyr.x = (mpu6050_buf.buff[3]/16.4);//16384//8192
-		gyr.y = (mpu6050_buf.buff[4]/16.4);//16384//8192
-		gyr.z = (mpu6050_buf.buff[5]/16.4);//16384//8192
+		acc_offset[0] = (s16)MoveAve_WMA((s16)mpu6050_buf.buff[0], ACC_FIFO[0], MagCorrect_Ave);
+		acc_offset[1] = (s16)MoveAve_WMA((s16)mpu6050_buf.buff[1], ACC_FIFO[1], MagCorrect_Ave);
+		acc_offset[2] = (s16)MoveAve_WMA((s16)mpu6050_buf.buff[2], ACC_FIFO[2], MagCorrect_Ave);
+		gyro_offset[0] = (s16)MoveAve_WMA((s16)mpu6050_buf.buff[3], GYR_FIFO[0], MagCorrect_Ave);
+		gyro_offset[1] = (s16)MoveAve_WMA((s16)mpu6050_buf.buff[4], GYR_FIFO[1], MagCorrect_Ave);
+		gyro_offset[2] = (s16)MoveAve_WMA((s16)mpu6050_buf.buff[5], GYR_FIFO[2], MagCorrect_Ave);
 
-		acc_offset[0] = acc.x;
-		acc_offset[1] = acc.y;
-		acc_offset[2] = (1.0 - acc.z);
-		gyro_offset[0] = gyr.x;
-		gyro_offset[1] = gyr.y;
-		gyro_offset[2] = gyr.z;
+		acc_offset[0] = (acc_offset[0]/8192.0);//16384//8192
+		acc_offset[1] = (acc_offset[1]/8192.0);//16384//8192
+		acc_offset[2] = 1 - (acc_offset[2]/8192.0);//16384//8192
+		gyro_offset[0] = (gyro_offset[0]/16.4);//16384//8192
+		gyro_offset[1] = (gyro_offset[1]/16.4);//16384//8192
+		gyro_offset[2] = (gyro_offset[2]/16.4);//16384//8192
+
+		printf("acc_x,%f,acc_y,%f,acc_z,%f,gyr_x,%f,gyr_y,%f,gyr_z,%f\r\n",
+			acc_offset[0],acc_offset[1],acc_offset[2],gyro_offset[0],gyro_offset[1],gyro_offset[2]);
 	
-		for(int j=0;j<3;j++)
-		{
-			acc_buff[j]+=acc_offset[j];
-			gyro_buff[j]+=gyro_offset[j];
-		}
 	//delay(10);
-	}
-	for(int j=0;j<3;j++)
-	{
-		acc_offset[j]=acc_buff[j]/1000.0;
-		gyro_offset[j]=gyro_buff[j]/1000.0;
 	}
 
 	printf("acc_x,%f,acc_y,%f,acc_z,%f,gyr_x,%f,gyr_y,%f,gyr_z,%f\r\n",
 			acc_offset[0],acc_offset[1],acc_offset[2],gyro_offset[0],gyro_offset[1],gyro_offset[2]);
+
+	printf("GYR,ACC calibration complete\r\n ready to calibrate magnetometer \r\n");
+
 }
 
 void initial_mag()

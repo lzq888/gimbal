@@ -5,6 +5,8 @@
 void GPIO_Configuration(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
+	/*timmer3 remap*/
+	GPIO_PinRemapConfig(GPIO_FullRemap_TIM3,ENABLE);
 
 	//LED1
 	GPIO_InitStructure.GPIO_Pin = LED1_Pin ;
@@ -17,28 +19,31 @@ void GPIO_Configuration(void)
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(LED2_Port, &GPIO_InitStructure);
   
-/*
+    /*pwm*/
+
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = 	GPIO_Mode_AF_PP;
 	GPIO_InitStructure.GPIO_Pin = 	GPIO_Pin_7;		   	        // PWMOUT PB 7
-	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	GPIO_Init(GPIOC, &GPIO_InitStructure);
 
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = 	GPIO_Mode_AF_PP;
 	GPIO_InitStructure.GPIO_Pin = 	GPIO_Pin_6;		   	        // PWMOUT PB6
-	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	GPIO_Init(GPIOC, &GPIO_InitStructure);
 
 
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = 	GPIO_Mode_AF_PP;
 	GPIO_InitStructure.GPIO_Pin = 	GPIO_Pin_9;		   	        
-	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	GPIO_Init(GPIOC, &GPIO_InitStructure);
 
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = 	GPIO_Mode_AF_PP;
 	GPIO_InitStructure.GPIO_Pin = 	GPIO_Pin_8;		   	        
-	GPIO_Init(GPIOB, &GPIO_InitStructure);
-*/
+	GPIO_Init(GPIOC, &GPIO_InitStructure);
+
+
+
 	/*exit*/
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;					//¥~³¡¤¤   PB2
   	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;

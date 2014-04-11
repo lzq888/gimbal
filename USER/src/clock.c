@@ -68,7 +68,8 @@ void RCC_Configuration(void)
 	RCC_APB1PeriphClockCmd(	
 							RCC_APB1Periph_TIM2 |
 							RCC_APB1Periph_TIM3 |
-							RCC_APB1Periph_TIM4
+							RCC_APB1Periph_TIM4 |
+							RCC_APB1Periph_TIM5
 							, ENABLE);
 	
 }

@@ -69,15 +69,20 @@ extern  u8      		correction_flag;
 extern  sensor_acc		acc;
 extern  sensor_gyro		gyr;
 extern  sensor_magne    mag;
-extern  sensor_acc		acc_time;
-extern  sensor_gyro		gyr_time;
-extern  sensor_magne    mag_time;
+
 
 
 
 /*for ahrs*/
 extern  EulerAngle 		ang;
 extern  Quaternion      qua;
+
+
+
+/*initial*/
+extern  u8   			initial_flag;
+
+
 
 
 

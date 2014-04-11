@@ -14,10 +14,12 @@ Description: This example shows how to use ADC function to capture 1 channel ana
 // Input:  N/A
 // Output: N/A
 // Remark: N/A
-//*********************************************************	 
-float 	tempx;
-float 	tempy;
-float 	tempyaw;
+//*********************************************************
+
+float 	magn_x;
+float 	magn_y;
+float 	magn_yaw;
+
 
 void send_byte(uint8_t b)
 {
@@ -45,13 +47,18 @@ void delay(uint32_t delay_count)
 {
 	/*Initial STM32*/
 	Initial_MCU();
+
 	initial_AccGyro();
 	DELAY_ms(5000);
 	initial_mag();	
 	DELAY_ms(5000);
 
+	initial_flag = 1;
 	while(1)
 	{
+	
+		
+		
 		/*
 		if(gpgga_flag==1)
 		{
@@ -71,15 +78,21 @@ void delay(uint32_t delay_count)
 		//printf("y : %f\r\n",gps.y);
 		//printf("z : %f\r\n",gps.z);
 	
-		mpu_9150_data();
+		
+		
+		/*compass
 		tempx = ((mag_time.x - mag_time.EllipseX0) * arm_cos_f32(mag_time.EllipseSita) - (mag_time.y - mag_time.EllipseY0) * arm_sin_f32(mag_time.EllipseSita)) / mag_time.EllipseA;
 		tempy = ((mag_time.x - mag_time.EllipseX0) * arm_sin_f32(mag_time.EllipseSita) + (mag_time.y - mag_time.EllipseY0) * arm_cos_f32(mag_time.EllipseSita)) / mag_time.EllipseB;
 		tempyaw	 = toDeg(atan2f(tempx, tempy));
-		//printf("mag_x,%f,mag_y,%f,yaw,%f\r\n",tempx, tempy,tempyaw);		
-		//printf("1,%f,2,%f,3,%f,4,%f,5,%f\r\n",mag_time.EllipseSita,mag_time.EllipseX0,mag_time.EllipseY0,mag_time.EllipseA,mag_time.EllipseB);
-		//printf("acc_x,%f,acc_y,%f,acc_z,%f,gyr_x,%f,gyr_y,%f,gyr_z,%f\r\n,mag_x,%f,mag_y,%f,mag_z,%f\r\n",
-			//acc_time.x,acc_time.y,acc_time.z,gyr_time.x,gyr_time.y,gyr_time.z,mag_time.x, mag_time.y, mag_time.z);							
+		printf("1,%f,2,%f,3,%f\r\n",tempx,tempy,tempyaw);	
+		//printf("1,%f,2,%f,3,%f,4,%f,5,%f\r\n",mag_time.EllipseSita,mag_time.EllipseX0,mag_time.EllipseY0,mag_time.EllipseA,mag_time.EllipseB);						
 		//printf("mag_x,%f,mag_y,%f,mag_z,%f\r\n",mag_time.x, mag_time.y, mag_time.z);		
+		*/
+
+
+
+		//printf("1,%d,2,%d,3,%d,4,%d,\r\n",joystick.Remote_PWM_Pitch,joystick.Remote_PWM_Roll,joystick.Remote_PWM_Yaw,joystick.Remote_on_off);	
+		
 	
 
 
