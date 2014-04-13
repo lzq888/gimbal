@@ -99,7 +99,7 @@ void PWMoutputD(u16 n)
 	TIM_OC1Init(TIM3, &TIM_OCInitStructure);         //TIM_OC3(channel~¬dªí
 	
 }
-
+/*10hz*/
 void TIM2_IRQHandler(void)
 {
 	if(TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET) 
@@ -107,18 +107,16 @@ void TIM2_IRQHandler(void)
 	  	if(initial_flag==1)	
 		{
 			//printf("acc_x,%f,acc_y,%f,acc_z,%f,gyr_x,%f,gyr_y,%f,gyr_z,%f\r\n",
-			//acc.x,acc.y,acc.z,gyr.x,gyr.y,gyr.z);
-		
+			//acc.x,acc.y,acc.z,gyr.x,gyr.y,gyr.z);		
 			//printf("1,%f,2,%f,3,%f,4,%f,5,%f\r\n",mag.EllipseSita,mag.EllipseX0,mag.EllipseY0,mag.EllipseA,mag.EllipseB);						
 			//printf("mag_x,%f,mag_y,%f,mag_z,%f\r\n",mag.x, mag.y, mag.z);
-			printf("Yaw,%f\r\n",ang.Yaw);
-
+			//printf("magne_Yaw,%f\r\n",ang.Yaw);
 		}
 
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 	}
 }
-
+/*50hz*/
 void TIM3_IRQHandler(void)
 {
 	if(TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET) 
@@ -193,7 +191,7 @@ void TIM3_IRQHandler(void)
 		
 }
 
-
+/*1000hz*/
 void TIM4_IRQHandler(void)
 {
 	if(TIM_GetITStatus(TIM4, TIM_IT_Update) != RESET) 
@@ -201,21 +199,21 @@ void TIM4_IRQHandler(void)
 		delay_buf++;		  			
 		if(initial_flag==1)	
 		{
-			mpu_9150_data();
+			//mpu_9150_data();
 		}	
 		
 		TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
 	}
 }
-
+/*100hz*/
 void TIM5_IRQHandler(void)
 {
 	if(TIM_GetITStatus(TIM5, TIM_IT_Update) != RESET) 
 	{			  			
 		if(initial_flag==1)	
 		{
-			ahrs_update();
-			printf("Yaw,%f\r\n",ang.Yaw);
+			mpu_9150_data();
+			ahrs_update();			
 		}	
 		
 		TIM_ClearITPendingBit(TIM5, TIM_IT_Update);
