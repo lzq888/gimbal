@@ -46,8 +46,8 @@ void TIMER_Configuration(void)
 	/*72MHz/((999+1)*(71+1))=50Hz*/
 
 	/*TIMER2 */	
-	TIM_TimeBaseStructure.TIM_Period =99999;			  				//high voltage portion(between 0-period)
-  	TIM_TimeBaseStructure.TIM_Prescaler = 71;		
+	TIM_TimeBaseStructure.TIM_Period =9999;			  				//high voltage portion(between 0-period)
+  	TIM_TimeBaseStructure.TIM_Prescaler = 719;		
   	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
   	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
@@ -213,7 +213,7 @@ void TIM5_IRQHandler(void)
 		if(initial_flag==1)	
 		{
 			mpu_9150_data();
-			ahrs_update();			
+			ahrs_update();				
 		}	
 		
 		TIM_ClearITPendingBit(TIM5, TIM_IT_Update);
