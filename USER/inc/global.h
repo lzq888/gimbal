@@ -23,6 +23,8 @@ typedef struct {
 	float 		EllipseY0;
 	float 		EllipseA;
 	float 		EllipseB;
+	float       magz_offset;
+	float 		magz_range;
 }sensor_magne;
 
 typedef struct {
@@ -76,6 +78,7 @@ extern  sensor_magne    mag;
 /*for ahrs*/
 extern  EulerAngle 		ang;
 extern  Quaternion      qua;
+
 
 
 
