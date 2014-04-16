@@ -109,7 +109,7 @@ void TIM2_IRQHandler(void)
 			//printf("acc_x,%f,acc_y,%f,acc_z,%f,gyr_x,%f,gyr_y,%f,gyr_z,%f\r\n",
 			//acc.x,acc.y,acc.z,gyr.x,gyr.y,gyr.z);		
 			//printf("1,%f,2,%f,3,%f,4,%f,5,%f\r\n",mag.EllipseSita,mag.EllipseX0,mag.EllipseY0,mag.EllipseA,mag.EllipseB);						
-			printf("mag_x,%f,mag_y,%f,mag_z,%f\r\n",mag.x, mag.y, mag.z);
+			//printf("%f  %f  %f\r\n",mag.x, mag.y, mag.z);
 			//printf("magne_Yaw,%f\r\n",ang.Yaw);
 		}
 

@@ -7,17 +7,23 @@ float 			gyro_offset[3];
 float 			Ellipse[5] = {0};
 imu_buffer   	mpu6050_buf;
 
-float 			mag_max = 0;
-float 			mag_min = 0;
+float 			mag_x_max = 0;
+float 			mag_x_min = 100;
+float 			mag_y_max = 100;
+float 			mag_y_min = 100;
+float 			mag_z_max = 100;
+float 			mag_z_min = 100;
 
 
 volatile int16_t ACC_FIFO[3][256] = {{0}};
 volatile int16_t GYR_FIFO[3][256] = {{0}};
 
-volatile int16_t MAG_FIFO[2][256] = {{0}};
+volatile int16_t MAG_FIFO[3][256] = {{0}};
 
 volatile int16_t MagDataX[8] = {0};
 volatile int16_t MagDataY[8] = {0};
+volatile int16_t MagDataZ[2] = {0};
+
 
 
 
@@ -74,6 +80,7 @@ void initial_AccGyro()
 void initial_mag()
 {
 	/*direction 1*/
+/*
 	for(int i=0;i<MagCorrect_time;i++)
 	{
 	
@@ -84,7 +91,7 @@ void initial_mag()
 		mag.z = (mpu6050_buf.magne[2]);//16384//8192
 
 		/*magne correction start*/
-		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAX,7, 8, &tmp);
+/*		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAX,7, 8, &tmp);
 		mpu6050_buf.magn_correct[0]=tmp;
     	MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAY,7, 8, &tmp);
 		mpu6050_buf.magn_correct[1]=tmp;
@@ -96,7 +103,7 @@ void initial_mag()
 		mpu6050_buf.magn_correct[2] = ((mpu6050_buf.magn_correct[2]-128)*0.5/128.0)+1;
 		/*magne correction over*/
 
-		mag.x *= mpu6050_buf.magn_correct[0];//131/16.4
+/*		mag.x *= mpu6050_buf.magn_correct[0];//131/16.4
 		mag.y *= mpu6050_buf.magn_correct[1];//131/16.4
 		mag.z *= mpu6050_buf.magn_correct[2];//131/16.4
 
@@ -114,7 +121,7 @@ void initial_mag()
 	DELAY_ms(5000);
 	/*direction 2*/
 
-	for(int i=0;i<MagCorrect_time;i++)
+/*	for(int i=0;i<MagCorrect_time;i++)
 	{
 	
 		uint8_t 	tmp;
@@ -124,7 +131,7 @@ void initial_mag()
 		mag.z = (mpu6050_buf.magne[2]);//16384//8192
 
 		/*magne correction start*/
-		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAX,7, 8, &tmp);
+/*		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAX,7, 8, &tmp);
 		mpu6050_buf.magn_correct[0]=tmp;
     	MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAY,7, 8, &tmp);
 		mpu6050_buf.magn_correct[1]=tmp;
@@ -136,7 +143,7 @@ void initial_mag()
 		mpu6050_buf.magn_correct[2] = ((mpu6050_buf.magn_correct[2]-128)*0.5/128.0)+1;
 		/*magne correction over*/
 
-		mag.x *= mpu6050_buf.magn_correct[0];//131/16.4
+/*		mag.x *= mpu6050_buf.magn_correct[0];//131/16.4
 		mag.y *= mpu6050_buf.magn_correct[1];//131/16.4
 		mag.z *= mpu6050_buf.magn_correct[2];//131/16.4
 
@@ -154,7 +161,7 @@ void initial_mag()
 	DELAY_ms(5000);
 	/*direction 3*/
 
-	for(int i=0;i<MagCorrect_time;i++)
+/*	for(int i=0;i<MagCorrect_time;i++)
 	{
 	
 		uint8_t 	tmp;
@@ -164,7 +171,7 @@ void initial_mag()
 		mag.z = (mpu6050_buf.magne[2]);//16384//8192
 
 		/*magne correction start*/
-		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAX,7, 8, &tmp);
+/*		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAX,7, 8, &tmp);
 		mpu6050_buf.magn_correct[0]=tmp;
     	MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAY,7, 8, &tmp);
 		mpu6050_buf.magn_correct[1]=tmp;
@@ -176,7 +183,7 @@ void initial_mag()
 		mpu6050_buf.magn_correct[2] = ((mpu6050_buf.magn_correct[2]-128)*0.5/128.0)+1;
 		/*magne correction over*/
 
-		mag.x *= mpu6050_buf.magn_correct[0];//131/16.4
+/*		mag.x *= mpu6050_buf.magn_correct[0];//131/16.4
 		mag.y *= mpu6050_buf.magn_correct[1];//131/16.4
 		mag.z *= mpu6050_buf.magn_correct[2];//131/16.4
 
@@ -195,7 +202,7 @@ void initial_mag()
 
 	/*direction 4*/
 
-	for(int i=0;i<MagCorrect_time;i++)
+/*	for(int i=0;i<MagCorrect_time;i++)
 	{
 	
 		uint8_t 	tmp;
@@ -205,7 +212,7 @@ void initial_mag()
 		mag.z = (mpu6050_buf.magne[2]);//16384//8192
 
 		/*magne correction start*/
-		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAX,7, 8, &tmp);
+/*		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAX,7, 8, &tmp);
 		mpu6050_buf.magn_correct[0]=tmp;
     	MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAY,7, 8, &tmp);
 		mpu6050_buf.magn_correct[1]=tmp;
@@ -217,7 +224,7 @@ void initial_mag()
 		mpu6050_buf.magn_correct[2] = ((mpu6050_buf.magn_correct[2]-128)*0.5/128.0)+1;
 		/*magne correction over*/
 
-		mag.x *= mpu6050_buf.magn_correct[0];//131/16.4
+/*		mag.x *= mpu6050_buf.magn_correct[0];//131/16.4
 		mag.y *= mpu6050_buf.magn_correct[1];//131/16.4
 		mag.z *= mpu6050_buf.magn_correct[2];//131/16.4
 
@@ -236,7 +243,7 @@ void initial_mag()
 
 	/*direction 5*/
 
-	for(int i=0;i<MagCorrect_time;i++)
+/*	for(int i=0;i<MagCorrect_time;i++)
 	{
 	
 		uint8_t 	tmp;
@@ -246,7 +253,7 @@ void initial_mag()
 		mag.z = (mpu6050_buf.magne[2]);//16384//8192
 
 		/*magne correction start*/
-		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAX,7, 8, &tmp);
+/*		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAX,7, 8, &tmp);
 		mpu6050_buf.magn_correct[0]=tmp;
     	MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAY,7, 8, &tmp);
 		mpu6050_buf.magn_correct[1]=tmp;
@@ -258,7 +265,7 @@ void initial_mag()
 		mpu6050_buf.magn_correct[2] = ((mpu6050_buf.magn_correct[2]-128)*0.5/128.0)+1;
 		/*magne correction over*/
 
-		mag.x *= mpu6050_buf.magn_correct[0];//131/16.4
+/*		mag.x *= mpu6050_buf.magn_correct[0];//131/16.4
 		mag.y *= mpu6050_buf.magn_correct[1];//131/16.4
 		mag.z *= mpu6050_buf.magn_correct[2];//131/16.4
 
@@ -277,7 +284,7 @@ void initial_mag()
 
 	/*direction 6*/
 
-	for(int i=0;i<MagCorrect_time;i++)
+/*	for(int i=0;i<MagCorrect_time;i++)
 	{
 	
 		uint8_t 	tmp;
@@ -287,7 +294,7 @@ void initial_mag()
 		mag.z = (mpu6050_buf.magne[2]);//16384//8192
 
 		/*magne correction start*/
-		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAX,7, 8, &tmp);
+/*		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAX,7, 8, &tmp);
 		mpu6050_buf.magn_correct[0]=tmp;
     	MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAY,7, 8, &tmp);
 		mpu6050_buf.magn_correct[1]=tmp;
@@ -299,7 +306,7 @@ void initial_mag()
 		mpu6050_buf.magn_correct[2] = ((mpu6050_buf.magn_correct[2]-128)*0.5/128.0)+1;
 		/*magne correction over*/
 
-		mag.x *= mpu6050_buf.magn_correct[0];//131/16.4
+/*		mag.x *= mpu6050_buf.magn_correct[0];//131/16.4
 		mag.y *= mpu6050_buf.magn_correct[1];//131/16.4
 		mag.z *= mpu6050_buf.magn_correct[2];//131/16.4
 
@@ -318,7 +325,7 @@ void initial_mag()
 
 	/*direction 7*/
 
-	for(int i=0;i<MagCorrect_time;i++)
+/*	for(int i=0;i<MagCorrect_time;i++)
 	{
 	
 		uint8_t 	tmp;
@@ -328,7 +335,7 @@ void initial_mag()
 		mag.z = (mpu6050_buf.magne[2]);//16384//8192
 
 		/*magne correction start*/
-		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAX,7, 8, &tmp);
+/*		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAX,7, 8, &tmp);
 		mpu6050_buf.magn_correct[0]=tmp;
     	MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAY,7, 8, &tmp);
 		mpu6050_buf.magn_correct[1]=tmp;
@@ -340,7 +347,7 @@ void initial_mag()
 		mpu6050_buf.magn_correct[2] = ((mpu6050_buf.magn_correct[2]-128)*0.5/128.0)+1;
 		/*magne correction over*/
 
-		mag.x *= mpu6050_buf.magn_correct[0];//131/16.4
+/*		mag.x *= mpu6050_buf.magn_correct[0];//131/16.4
 		mag.y *= mpu6050_buf.magn_correct[1];//131/16.4
 		mag.z *= mpu6050_buf.magn_correct[2];//131/16.4
 
@@ -359,7 +366,7 @@ void initial_mag()
 
 	/*direction 8*/
 
-	for(int i=0;i<MagCorrect_time;i++)
+/*	for(int i=0;i<MagCorrect_time;i++)
 	{
 	
 		uint8_t 	tmp;
@@ -369,7 +376,7 @@ void initial_mag()
 		mag.z = (mpu6050_buf.magne[2]);//16384//8192
 
 		/*magne correction start*/
-		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAX,7, 8, &tmp);
+/*		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAX,7, 8, &tmp);
 		mpu6050_buf.magn_correct[0]=tmp;
     	MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAY,7, 8, &tmp);
 		mpu6050_buf.magn_correct[1]=tmp;
@@ -381,7 +388,7 @@ void initial_mag()
 		mpu6050_buf.magn_correct[2] = ((mpu6050_buf.magn_correct[2]-128)*0.5/128.0)+1;
 		/*magne correction over*/
 
-		mag.x *= mpu6050_buf.magn_correct[0];//131/16.4
+/*		mag.x *= mpu6050_buf.magn_correct[0];//131/16.4
 		mag.y *= mpu6050_buf.magn_correct[1];//131/16.4
 		mag.z *= mpu6050_buf.magn_correct[2];//131/16.4
 
@@ -391,18 +398,17 @@ void initial_mag()
 		
 		printf("mag_x,%f,mag_y,%f,mag_z,%f\r\n",mag.x, mag.y, mag.z);		
 	
-		mag_max = mag.z;
-		mag_min = mag.z;
+		
 	}	
 		printf("MagDataX[7],%d,MagDataY[7],%d\r\n",MagDataX[7],MagDataY[7]);
 	
 	printf("direction 8 complete\r\n please turn to next direction \r\n");
 
-	DELAY_ms(1000);
+	DELAY_ms(5000);
 
 	/*direction z*/
 
-	printf("Please turn Z in all direction\r\n");
+//	printf("Please turn Z in all direction\r\n");
 
 
 	for(int i=0;i<1000;i++)
@@ -429,26 +435,139 @@ void initial_mag()
 		mag.x *= mpu6050_buf.magn_correct[0];//131/16.4
 		mag.y *= mpu6050_buf.magn_correct[1];//131/16.4
 		mag.z *= mpu6050_buf.magn_correct[2];//131/16.4
-
-		if(mag.z > mag_max)
+		/*x direction*/
+		if(mag_x_min > mag.x )
 		{
-			mag_max = mag.z;
+			mag_x_min = mag.x;
 		}
-		if(mag.z < mag_min)
+		if(mag.x > mag_x_max)
 		{
-			mag_min = mag.z;
+			mag_x_max = mag.x;
 		}
-		printf("min,%f,max,%f\r\n",mag_min,mag_max);
-		DELAY_ms(1);
+		/*y direction*/
+		if(mag_y_min > mag.y )
+		{
+			mag_y_min = mag.y;
+		}
+		if(mag.y > mag_y_max)
+		{
+			mag_y_max = mag.y;
+		}
+		/*z direction*/
+		if(mag_z_min > mag.z )
+		{
+			mag_z_min = mag.z;
+		}
+		if(mag.z > mag_z_max)
+		{
+			mag_z_max = mag.z;
+		}
 	
+		printf("min_x,%f,max_x,%f,min_y,%f,max_y,%f,min_z,%f,max_z,%f\r\n",mag_x_min,mag_x_max,mag_y_min,mag_y_max,mag_z_min,mag_z_max);
+		printf("mag_x,%f,mag_y,%f,mag_z,%f\r\n",mag.x, mag.y, mag.z);		
+	}
+
+
+	printf("magnetometer calibration finished\r\n");
+	mag.magx_offset = ( mag_x_min + mag_x_max )/2;
+	mag.magy_offset = ( mag_y_min + mag_y_max )/2;
+	mag.magz_offset = ( mag_z_min + mag_z_max )/2;
+	//mag.magz_range  = abs(( mag_max - mag_min )/2);
+
+	printf("magx_offset,%f,magy_offset,%f,magz_offset,%f\r\n",mag.magx_offset,mag.magy_offset,mag.magz_offset);
+
+	/*direction Z+*/
+/*
+	for(int i=0;i<MagCorrect_time;i++)
+	{
+	
+		uint8_t 	tmp;
+		MPU6050_GetRawAccelGyro(mpu6050_buf.buff,mpu6050_buf.magne);
+		mag.x = (mpu6050_buf.magne[0]);//16384//8192
+		mag.y = (mpu6050_buf.magne[1]);//16384//8192
+		mag.z = (mpu6050_buf.magne[2]);//16384//8192
+
+		/*magne correction start*/
+/*		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAX,7, 8, &tmp);
+		mpu6050_buf.magn_correct[0]=tmp;
+    	MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAY,7, 8, &tmp);
+		mpu6050_buf.magn_correct[1]=tmp;
+		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAZ,7, 8, &tmp);
+		mpu6050_buf.magn_correct[2]=tmp;
+
+		mpu6050_buf.magn_correct[0] = ((mpu6050_buf.magn_correct[0]-128)*0.5/128.0)+1;
+		mpu6050_buf.magn_correct[1] = ((mpu6050_buf.magn_correct[1]-128)*0.5/128.0)+1;
+		mpu6050_buf.magn_correct[2] = ((mpu6050_buf.magn_correct[2]-128)*0.5/128.0)+1;
+		/*magne correction over*/
+
+/*		mag.x *= mpu6050_buf.magn_correct[0];//131/16.4
+		mag.y *= mpu6050_buf.magn_correct[1];//131/16.4
+		mag.z *= mpu6050_buf.magn_correct[2];//131/16.4
+
+
+		MagDataZ[0] = (s16)MoveAve_WMA((s16)mag.z, MAG_FIFO[2], MagCorrect_Ave);	
+		printf("mag_x,%f,mag_y,%f,mag_z,%f\r\n",mag.x, mag.y, mag.z);		
+	
+		
 	}	
+		printf("MagDataZ[0],%d\r\n",MagDataZ[0]);
+	
+	printf("direction Z+ complete\r\n please turn to next direction \r\n");
 
-	mag.magz_offset = ( mag_max + mag_min )/2;
-	mag.magz_range  = ( mag_max - mag_min )/2;
-
-	printf("magz_offset,%f,magz_range,%f\r\n",mag.magz_offset,mag.magz_range);
+	DELAY_ms(5000);
 
 
+	for(int i=0;i<MagCorrect_time;i++)
+	{
+	
+		uint8_t 	tmp;
+		MPU6050_GetRawAccelGyro(mpu6050_buf.buff,mpu6050_buf.magne);
+		mag.x = (mpu6050_buf.magne[0]);//16384//8192
+		mag.y = (mpu6050_buf.magne[1]);//16384//8192
+		mag.z = (mpu6050_buf.magne[2]);//16384//8192
+
+		/*magne correction start*/
+/*		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAX,7, 8, &tmp);
+		mpu6050_buf.magn_correct[0]=tmp;
+    	MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAY,7, 8, &tmp);
+		mpu6050_buf.magn_correct[1]=tmp;
+		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAZ,7, 8, &tmp);
+		mpu6050_buf.magn_correct[2]=tmp;
+
+		mpu6050_buf.magn_correct[0] = ((mpu6050_buf.magn_correct[0]-128)*0.5/128.0)+1;
+		mpu6050_buf.magn_correct[1] = ((mpu6050_buf.magn_correct[1]-128)*0.5/128.0)+1;
+		mpu6050_buf.magn_correct[2] = ((mpu6050_buf.magn_correct[2]-128)*0.5/128.0)+1;
+		/*magne correction over*/
+
+/*		mag.x *= mpu6050_buf.magn_correct[0];//131/16.4
+		mag.y *= mpu6050_buf.magn_correct[1];//131/16.4
+		mag.z *= mpu6050_buf.magn_correct[2];//131/16.4
+
+
+		MagDataZ[1] = (s16)MoveAve_WMA((s16)mag.z, MAG_FIFO[2], MagCorrect_Ave);
+		
+		
+		printf("mag_x,%f,mag_y,%f,mag_z,%f\r\n",mag.x, mag.y, mag.z);		
+			
+	}	
+		printf("MagDataZ[1],%d\r\n",MagDataZ[1]);
+	
+	printf("direction Z+ complete\r\n please turn to next direction \r\n");
+
+	DELAY_ms(5000);
+
+	mag.magz_offset = ( MagDataZ[0] + MagDataZ[1] )/2;
+	
+	if(MagDataZ[0] > MagDataZ[1])
+	{
+		mag.magz_range  = ( MagDataZ[0] - MagDataZ[1] )/2;
+	}
+	else if (MagDataZ[0] < MagDataZ[1])
+	{
+		mag.magz_range  = ( MagDataZ[1] - MagDataZ[0] )/2;
+	}
+*/	
+/*	printf("magz_offset,%f,magz_range,%f\r\n",mag.magz_offset,mag.magz_range);
 
 	for(int i=0;i<8;i++)
 	{
@@ -464,7 +583,7 @@ void initial_mag()
 	mag.EllipseB    = Ellipse[4];
 
 	printf("1,%f,2,%f,3,%f,4,%f,5,%f\r\n",mag.EllipseSita,mag.EllipseX0,mag.EllipseY0,mag.EllipseA,mag.EllipseB);
-
+*/
 }
 
 

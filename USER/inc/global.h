@@ -23,6 +23,10 @@ typedef struct {
 	float 		EllipseY0;
 	float 		EllipseA;
 	float 		EllipseB;
+	float       magx_offset;
+	float 		magx_range;
+	float       magy_offset;
+	float 		magy_range;
 	float       magz_offset;
 	float 		magz_range;
 }sensor_magne;
