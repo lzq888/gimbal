@@ -10,6 +10,12 @@
 #define toRad( Math_D )	((float)(Math_D)*0.0174532925f)
 #define toDeg( Math_R )	((float)(Math_R)*57.2957795f)
 
+#define pow2( Math_R )	((float)(Math_R)*(float)(Math_R))
+#define pow3( Math_R )	((float)(Math_R)*(float)(Math_R)*(float)(Math_R))
+#define pow4( Math_R )	((float)(Math_R)*(float)(Math_R)*(float)(Math_R)*(float)(Math_R))
+#define pow5( Math_R )	((float)(Math_R)*(float)(Math_R)*(float)(Math_R)*(float)(Math_R)*(float)(Math_R))
+
+
 extern 	int 			delay_buf;
 
 

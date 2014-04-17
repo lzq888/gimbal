@@ -70,6 +70,7 @@ extern  Remote_signal   joystick;
 /*for gps*/
 extern  u8  			gps_buf;
 extern  sensor_gps		gps;
+extern  sensor_gps		target;
 /*for imu*/
 extern  u8      		correction_flag;
 extern  sensor_acc		acc;

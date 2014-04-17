@@ -16,6 +16,7 @@ u8      		timer_buf=0;
 /*for gps*/
 u8  			gps_buf;
 sensor_gps		gps;
+sensor_gps		target;
 /*for imu*/
 u8      		correction_flag=0;
 sensor_acc		acc;

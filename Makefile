@@ -108,6 +108,7 @@ SRC+=./USER/src/adc.c \
      ./USER/src/sensor.c \
      ./USER/src/joystick_command.c \
      ./USER/src/ahrs.c \
+     ./USER/src/aimming.c \
      ./adding/src/algorithm_moveAve.c \
      ./adding/src/algorithm_quaternion.c
     

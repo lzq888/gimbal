@@ -110,10 +110,12 @@ void TIM2_IRQHandler(void)
 			//acc.x,acc.y,acc.z,gyr.x,gyr.y,gyr.z);		
 			//printf("1,%f,2,%f,3,%f,4,%f,5,%f\r\n",mag.EllipseSita,mag.EllipseX0,mag.EllipseY0,mag.EllipseA,mag.EllipseB);						
 			//printf("%f  %f  %f\r\n",mag.x, mag.y, mag.z);
-			printf("magne_Yaw,%f\r\n",ang.Yaw);
+			//printf("magne_Yaw,%f\r\n",ang.Yaw);
 			//printf("x : %f\r\n",gps.x);
 			//printf("y : %f\r\n",gps.y);
 			//printf("z : %f\r\n",gps.z);
+			//printf("x1,%f,y1,%f,z1,%f\r\n",target.x,target.y,target.z);
+			//printf("pitch,%f,roll,%f,yaw,%f\r\n",ang.Pitch, ang.Roll, ang.Yaw);
 		}
 
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);

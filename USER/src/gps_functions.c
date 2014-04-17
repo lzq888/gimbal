@@ -7,14 +7,36 @@
 #include "bool.h"
 
 gps_flags 		gga_flags;
+
 gps_buffers 	gga_buffer;
 gps_data        gga;
 u16    			word_count=0;
 
 
+char 			  target_lad[10] = "2259.72778";
+char              target_lon[10] = "12013.3505";
+char              target_height[10] = "36";
+
+/*moving point*/
 float 			x=0;
 float 			y=0;
 float   		z=0;
+/*target point*/
+float 			x1=0;
+float 			y1=0;
+float   		z1=0;
+
+
+
+void target_initial()
+{
+	gga2twd97(toRad(m2dec_lad(target_lad)),toRad(m2dec_lon(target_lon)),&x1,&y1);
+	z1 = atof(target_height);
+	target.x = x1;
+	target.y = y1;
+	target.z = z1;
+	printf("target_x,%f,target_y,%f,target_z,%f\r\n",x1,y1,z1);
+}
 
 float m2dec_lad(char* buffer)
 {
@@ -91,22 +113,22 @@ void gga2twd97(float lat,float lon,float *x,float *y)
 	float K5 = 0;
 
     /*Symbols*/
-	e = sqrt(1 - pow(Polar_Radius/Equatorial_Radius,2) );
-	e2= pow(e,2)/(1-pow(e,2));
+	e = sqrt(1 - pow2(Polar_Radius/Equatorial_Radius) );
+	e2= pow2(e)/(1-pow2(e));
 	n = (Equatorial_Radius-Polar_Radius)/(Equatorial_Radius+Polar_Radius);
-	nu= Equatorial_Radius/sqrt( 1 - pow(e,2)*pow(arm_sin_f32(lat),2));
+	nu= Equatorial_Radius/sqrt( 1 - pow2(e)*pow2(arm_sin_f32(lat)));
 	p1= degree2radians(long0);
 	p = lon-p1;
 	/*Calculate the Meridional Arc*/
-	A = Equatorial_Radius*(1 - n +(5/4.0)*(pow(n,2)-pow(n,3)) + (81/64.0)*(pow(n,4)-pow(n,5)));	 
+	A = Equatorial_Radius*(1 - n +(5/4.0)*(pow2(n)-pow3(n)) + (81/64.0)*(pow4(n)-pow5(n)));	 
 	// A = a*(1 - n + (5/4.0)*(n**2 - n**3) + (81/64.0)*(n**4  - n**5))
-	B = (3*Equatorial_Radius*n/2.0)*(1 - n + (7/8.0)*(pow(n,2) - pow(n,3)) + (55/64.0)*(pow(n,4) - pow(n,5)));
+	B = (3*Equatorial_Radius*n/2.0)*(1 - n + (7/8.0)*(pow2(n) - pow3(n)) + (55/64.0)*(pow4(n) - pow5(n)));
 	// B = (3*a*n/2.0)*(1 - n + (7/8.0)*(n**2 - n**3) + (55/64.0)*(n**4 - n**5))
-	C = (15*Equatorial_Radius*pow(n,2)/16.0)*(1 - n + (3/4.0)*(pow(n,2) - pow(n,3)));
+	C = (15*Equatorial_Radius*pow2(n)/16.0)*(1 - n + (3/4.0)*(pow2(n) - pow3(n)));
 	// C = (15*a*(n**2)/16.0)*(1 - n + (3/4.0)*(n**2 - n**3))
-	D = (35*Equatorial_Radius*pow(n,3)/48.0)*(1 - n + (11/16.0)*(pow(n,2) - pow(n,3)));
+	D = (35*Equatorial_Radius*pow3(n)/48.0)*(1 - n + (11/16.0)*(pow2(n) - pow3(n)));
 	// D = (35*a*(n**3)/48.0)*(1 - n + (11/16.0)*(n**2 - n**3))
-	E = (315*Equatorial_Radius*pow(n,4)/51.0)*(1- n);  
+	E = (315*Equatorial_Radius*pow4(n)/51.0)*(1- n);  
 	// E = (315*a*(n**4)/51.0)*(1 - n)
 	S = A*lat - B*arm_sin_f32(2*lat) + C*arm_sin_f32(4*lat) - D*arm_sin_f32(6*lat) + E*arm_sin_f32(8*lat);
 	// S = A*lat - B*sin(2*lat) + C*sin(4*lat) - D*sin(6*lat) + E*sin(8*lat)
@@ -116,15 +138,15 @@ void gga2twd97(float lat,float lon,float *x,float *y)
    	// K1 = S*k0
     K2 = k0*nu*arm_sin_f32(2*lat)/4.0;
     // K2 = k0*nu*sin(2*lat)/4.0
-    K3 = (k0*nu*arm_sin_f32(lat)*pow(arm_cos_f32(lat),3)/24.0)*(5 - pow(tan(lat),2) + 9*e2*pow(arm_cos_f32(lat),2) + 4*pow(e2,2)*pow(arm_cos_f32(lat),4));
+    K3 = (k0*nu*arm_sin_f32(lat)*pow3(arm_cos_f32(lat))/24.0)*(5 - pow2(tan(lat)) + 9*e2*pow2(arm_cos_f32(lat)) + 4*pow2(e2)*pow4(arm_cos_f32(lat)));
     // K3 = (k0*nu*sin(lat)*(arm_cos_f32(lat)**3)/24.0) * (5 - tan(lat)**2 + 9*e2*(cos(lat)**2) + 4*(e2**2)*(cos(lat)**4))
     K4 = k0*nu*arm_cos_f32(lat);
     // K4 = k0*nu*cos(lat)
-    K5 = (k0*nu*pow(arm_cos_f32(lat),3)/6.0) * (1 - pow(tan(lat),2) + e2*pow(arm_cos_f32(lat),2));
+    K5 = (k0*nu*pow3(arm_cos_f32(lat))/6.0) * (1 - pow2(tan(lat)) + e2*pow2(arm_cos_f32(lat)));
     // K5 = (k0*nu*(cos(lat)**3)/6.0) * (1 - tan(lat)**2 + e2*(cos(lat)**2))
-	*x = K4*p + K5*pow(p,3) + dx ;
+	*x = K4*p + K5*pow3(p) + dx ;
 	// x = K4*p + K5*(p**3) + self.dx
-	*y = K1 + K2*pow(p,2) + K3*pow(p,4);
+	*y = K1 + K2*pow2(p) + K3*pow4(p);
 	// y = K1 + K2*(p**2) + K3*(p**4)
 }
 
