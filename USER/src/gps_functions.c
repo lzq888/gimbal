@@ -94,7 +94,7 @@ void gga2twd97(float lat,float lon,float *x,float *y)
 	e = sqrt(1 - pow(Polar_Radius/Equatorial_Radius,2) );
 	e2= pow(e,2)/(1-pow(e,2));
 	n = (Equatorial_Radius-Polar_Radius)/(Equatorial_Radius+Polar_Radius);
-	nu= Equatorial_Radius/sqrt( 1 - pow(e,2)*pow(sin(lat),2));
+	nu= Equatorial_Radius/sqrt( 1 - pow(e,2)*pow(arm_sin_f32(lat),2));
 	p1= degree2radians(long0);
 	p = lon-p1;
 	/*Calculate the Meridional Arc*/
@@ -108,19 +108,19 @@ void gga2twd97(float lat,float lon,float *x,float *y)
 	// D = (35*a*(n**3)/48.0)*(1 - n + (11/16.0)*(n**2 - n**3))
 	E = (315*Equatorial_Radius*pow(n,4)/51.0)*(1- n);  
 	// E = (315*a*(n**4)/51.0)*(1 - n)
-	S = A*lat - B*sin(2*lat) + C*sin(4*lat) - D*sin(6*lat) + E*sin(8*lat);
+	S = A*lat - B*arm_sin_f32(2*lat) + C*arm_sin_f32(4*lat) - D*arm_sin_f32(6*lat) + E*arm_sin_f32(8*lat);
 	// S = A*lat - B*sin(2*lat) + C*sin(4*lat) - D*sin(6*lat) + E*sin(8*lat)
 
 	/*Converting Latitude and Longitude to UTM*/
    	K1 = S*k0;
    	// K1 = S*k0
-    K2 = k0*nu*sin(2*lat)/4.0;
+    K2 = k0*nu*arm_sin_f32(2*lat)/4.0;
     // K2 = k0*nu*sin(2*lat)/4.0
-    K3 = (k0*nu*sin(lat)*pow(cos(lat),3)/24.0)*(5 - pow(tan(lat),2) + 9*e2*pow(cos(lat),2) + 4*pow(e2,2)*pow(cos(lat),4));
-    // K3 = (k0*nu*sin(lat)*(cos(lat)**3)/24.0) * (5 - tan(lat)**2 + 9*e2*(cos(lat)**2) + 4*(e2**2)*(cos(lat)**4))
-    K4 = k0*nu*cos(lat);
+    K3 = (k0*nu*arm_sin_f32(lat)*pow(arm_cos_f32(lat),3)/24.0)*(5 - pow(tan(lat),2) + 9*e2*pow(arm_cos_f32(lat),2) + 4*pow(e2,2)*pow(arm_cos_f32(lat),4));
+    // K3 = (k0*nu*sin(lat)*(arm_cos_f32(lat)**3)/24.0) * (5 - tan(lat)**2 + 9*e2*(cos(lat)**2) + 4*(e2**2)*(cos(lat)**4))
+    K4 = k0*nu*arm_cos_f32(lat);
     // K4 = k0*nu*cos(lat)
-    K5 = (k0*nu*pow(cos(lat),3)/6.0) * (1 - pow(tan(lat),2) + e2*pow(cos(lat),2));
+    K5 = (k0*nu*pow(arm_cos_f32(lat),3)/6.0) * (1 - pow(tan(lat),2) + e2*pow(arm_cos_f32(lat),2));
     // K5 = (k0*nu*(cos(lat)**3)/6.0) * (1 - tan(lat)**2 + e2*(cos(lat)**2))
 	*x = K4*p + K5*pow(p,3) + dx ;
 	// x = K4*p + K5*(p**3) + self.dx
@@ -234,16 +234,16 @@ void get_gps_data()
 					gga.longtitude_value=atof(gga_buffer.longtitude_string);
 					gga.height_value=atof(gga_buffer.height_string);
 
-					gga2twd97(degree2radians(m2dec_lad(gga_buffer.latitude_string)),degree2radians(m2dec_lon(gga_buffer.longtitude_string)),&x,&y);
+					gga2twd97(toRad(m2dec_lad(gga_buffer.latitude_string)),toRad(m2dec_lon(gga_buffer.longtitude_string)),&x,&y);
 					z=gga.height_value;
 					
 					gps.x=x;
 					gps.y=y;
 					gps.z=z;
 
-					//printf("x : %f\r\n",gps.x);
-					//printf("y : %f\r\n",gps.y);
-					//printf("z : %f\r\n",gps.z);
+					printf("x : %f\r\n",gps.x);
+					printf("y : %f\r\n",gps.y);
+					printf("z : %f\r\n",gps.z);
 					//printf("latitude : %f\r\n",gga.latitude_value);
 					//printf("longutitude : %f\r\n",gga.longtitude_value);
 					//printf("height : %f\r\n",gga.height_value);

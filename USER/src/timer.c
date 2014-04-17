@@ -13,7 +13,7 @@ void TIMER_Configuration(void)
 
 
     /*TIMER5 */	
-    TIM_TimeBaseStructure.TIM_Period =(uint16_t)(10000-1);			  			//period
+    TIM_TimeBaseStructure.TIM_Period =(uint16_t)(20000-1);			  			//period
   	TIM_TimeBaseStructure.TIM_Prescaler = (uint16_t)(72-1);  						//high voltage portion(between 0-period)	
   	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
@@ -46,7 +46,7 @@ void TIMER_Configuration(void)
 	/*72MHz/((999+1)*(71+1))=50Hz*/
 
 	/*TIMER2 */	
-	TIM_TimeBaseStructure.TIM_Period =9999;			  				//high voltage portion(between 0-period)
+	TIM_TimeBaseStructure.TIM_Period =99999;			  				//high voltage portion(between 0-period)
   	TIM_TimeBaseStructure.TIM_Prescaler = 719;		
   	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
@@ -55,7 +55,7 @@ void TIMER_Configuration(void)
 	TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
 		   			
 	
-	/*72MHz/((19999+1)*(71+1))=10Hz*/																																																							
+	/*72MHz/((19999+1)*(71+1))=1Hz*/																																																							
 }
 
 void PWMoutputA(u16 i) 													
@@ -110,7 +110,10 @@ void TIM2_IRQHandler(void)
 			//acc.x,acc.y,acc.z,gyr.x,gyr.y,gyr.z);		
 			//printf("1,%f,2,%f,3,%f,4,%f,5,%f\r\n",mag.EllipseSita,mag.EllipseX0,mag.EllipseY0,mag.EllipseA,mag.EllipseB);						
 			//printf("%f  %f  %f\r\n",mag.x, mag.y, mag.z);
-			//printf("magne_Yaw,%f\r\n",ang.Yaw);
+			printf("magne_Yaw,%f\r\n",ang.Yaw);
+			//printf("x : %f\r\n",gps.x);
+			//printf("y : %f\r\n",gps.y);
+			//printf("z : %f\r\n",gps.z);
 		}
 
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
@@ -199,7 +202,7 @@ void TIM4_IRQHandler(void)
 		delay_buf++;		  			
 		if(initial_flag==1)	
 		{
-			//mpu_9150_data();
+			
 		}	
 		
 		TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
@@ -213,7 +216,8 @@ void TIM5_IRQHandler(void)
 		if(initial_flag==1)	
 		{
 			mpu_9150_data();
-			ahrs_update();				
+			ahrs_update();
+
 		}	
 		
 		TIM_ClearITPendingBit(TIM5, TIM_IT_Update);

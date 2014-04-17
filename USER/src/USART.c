@@ -113,7 +113,7 @@ void USART_Config(USART_TypeDef* USARTX, uint32_t BaudRate)
 	}
 
 	/*Interrupt Configuration*/	
-	if(USARTX == USART1)
+/*	if(USARTX == USART1)
 	{																																											
 		NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;																																												
 	}
@@ -129,7 +129,7 @@ void USART_Config(USART_TypeDef* USARTX, uint32_t BaudRate)
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;																																												
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;																																												
 	NVIC_Init(&NVIC_InitStructure);	
-	
+*/	
 }
 /**
   * @brief  send a character from the specific USART(USART1~3)
@@ -198,9 +198,14 @@ void USART3_IRQHandler(void)
 
 		U3_RxData = USART_ReceiveData(USART3); //Get Data
 
+		//USART_SendData(USART1,U3_RxData); 	//Send back the Rx Data
+
+	 	//while(USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET)	;
+
 		gps_buf = U3_RxData;
 
 		get_gps_data();
+
 
 	}
 

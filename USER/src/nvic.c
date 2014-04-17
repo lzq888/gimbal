@@ -15,35 +15,54 @@ void NVIC_Configuration(void)
 		NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x0);   																																												
 	#endif 	
 	
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
+	/*preemption:2 sub:8*/
 
 	NVIC_InitStructure.NVIC_IRQChannel = TIM5_IRQn;																																												
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;																																												
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;																																												
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;	
-	NVIC_Init(&NVIC_InitStructure);	
-	
-	NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;																																												
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;																																												
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;																																												
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;	
+	NVIC_Init(&NVIC_InitStructure);
+
+	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;																																												
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;																																												
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;																																												
+	NVIC_Init(&NVIC_InitStructure);	
+
+	NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;																																												
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;																																												
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;																																												
+	NVIC_Init(&NVIC_InitStructure);	
+
+	NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;																																												
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;																																												
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;																																												
+	NVIC_Init(&NVIC_InitStructure);		
+	
+	NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;																																												
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;																																												
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;																																												
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;	
 	NVIC_Init(&NVIC_InitStructure);	
 	
 	NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;																																												
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;																																												
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;																																												
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;																																												
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;	
 	NVIC_Init(&NVIC_InitStructure);	
 
 	NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;																																												
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;																																												
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;																																												
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;																																												
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;	
 	NVIC_Init(&NVIC_InitStructure);
 	
 	NVIC_InitStructure.NVIC_IRQChannel = EXTI2_IRQn;        
   	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-  	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
+  	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 4;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;                      
   	NVIC_Init(&NVIC_InitStructure);       	
 	 
