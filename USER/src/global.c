@@ -17,6 +17,12 @@ u8      		timer_buf=0;
 u8  			gps_buf;
 sensor_gps		gps;
 sensor_gps		target;
+
+float 			global_yaw;
+float 			global_pitch;
+
+float 			body_yaw;
+float 			body_pitch;
 /*for imu*/
 u8      		correction_flag=0;
 sensor_acc		acc;

@@ -116,6 +116,7 @@ void TIM2_IRQHandler(void)
 			//printf("z : %f\r\n",gps.z);
 			//printf("x1,%f,y1,%f,z1,%f\r\n",target.x,target.y,target.z);
 			//printf("pitch,%f,roll,%f,yaw,%f\r\n",ang.Pitch, ang.Roll, ang.Yaw);
+			//printf("yaw,%f,pitch,%f\r\n",global_yaw,global_pitch);
 		}
 
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);

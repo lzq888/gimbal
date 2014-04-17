@@ -71,6 +71,12 @@ extern  Remote_signal   joystick;
 extern  u8  			gps_buf;
 extern  sensor_gps		gps;
 extern  sensor_gps		target;
+
+extern  float 			global_yaw;
+extern  float 			global_pitch;
+
+extern  float           body_yaw;
+extern  float           body_pitch;
 /*for imu*/
 extern  u8      		correction_flag;
 extern  sensor_acc		acc;
@@ -83,8 +89,6 @@ extern  sensor_magne    mag;
 /*for ahrs*/
 extern  EulerAngle 		ang;
 extern  Quaternion      qua;
-
-
 
 
 /*initial*/

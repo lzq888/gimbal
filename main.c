@@ -61,7 +61,7 @@ void delay(uint32_t delay_count)
 	initial_flag = 1;
 	while(1)
 	{
-		local_aimming_angle();
+		body_aimming_angle();
 		//get_gps_data();
 		//printf("magne_Yaw,%f\r\n",ang.Yaw);
 
