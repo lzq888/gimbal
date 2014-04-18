@@ -35,7 +35,9 @@ EulerAngle 		ang;
 Quaternion      qua;
 
 
+/*rotation matrix*/
 
+float 			Mq11, Mq12, Mq13, Mq21, Mq22, Mq23, Mq31, Mq32, Mq33;
 
 /*initial*/
 u8   			initial_flag=0;

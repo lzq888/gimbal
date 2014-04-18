@@ -49,10 +49,10 @@ void delay(uint32_t delay_count)
 	Initial_MCU();
 
 	initial_AccGyro();
-/*	DELAY_ms(5000);
+	DELAY_ms(5000);
 	initial_mag();	
 	DELAY_ms(5000);
-*/
+
 	AHRS_Init(&(qua),&(ang));
 	target_initial();
 	USART_Config( USART3, 115200);     //for gps

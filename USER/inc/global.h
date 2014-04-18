@@ -84,11 +84,13 @@ extern  sensor_gyro		gyr;
 extern  sensor_magne    mag;
 
 
-
-
 /*for ahrs*/
 extern  EulerAngle 		ang;
 extern  Quaternion      qua;
+
+/*rotation matrix*/
+
+extern  float 			Mq11, Mq12, Mq13, Mq21, Mq22, Mq23, Mq31, Mq32, Mq33;
 
 
 /*initial*/
