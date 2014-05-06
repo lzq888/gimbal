@@ -4,6 +4,11 @@ char  buffer[4];
 /*time delay*/
 int   delay_buf=0;
 
+void gpio_toggle(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
+{
+  GPIOx->ODR ^= GPIO_Pin;
+}
+
 void Int2Char(u16 number,char* buffer, int digitNumber )
 {
     int j;
@@ -522,6 +527,10 @@ float arm_sin_f32(float x)
   return (sinVal);
 
 }
+
+
+
+
         
 
 

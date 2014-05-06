@@ -15,14 +15,19 @@ void Initial_MCU(void)
 	Configure_ADC1();
    	/*DMA Configuration*/
 	DMA1_Channel1_Configuration();
+	
+	SPI2_Init();
+	initial_HMC5983();
 
 	MPU6050_I2C_Init();
 	MPU6050_Initialize();
+	
 
 	TIMER_Configuration();
 
 	USART_Config( USART1, 115200) ;  //for display on computer
 	USART_Config( USART2, 115200) ;  //for transmition
+	
 	
 
     EXTI_Configuration();

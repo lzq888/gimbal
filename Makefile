@@ -41,13 +41,14 @@ CFLAGS+=-I./lib/CMSIS/CM3/CoreSupport
 #StdPeriph includes
 CFLAGS+=-I$(ST_LIB)/inc/
 CFLAGS+=-I./lib/CMSIS/CM3/DeviceSupport/ST/STM32F10x/
-CFLAGS+=-I$(ST_LIB_add)/STM32_CPAL_Driver/inc/
-CFLAGS+=-I$(ST_LIB_add)/STM32_CPAL_Driver/devices/stm32f10x/
+
 
 #programs added
 CFLAGS+=-I./USER/inc/
 CFLAGS+=-I./STM32_MPU9150eMPL/Application/inc/
 CFLAGS+=-I./adding/inc/
+CFLAGS+=-I./sdcard/inc/
+CFLAGS+=-I./sdcard/lib/
 #CFLAGS+=-I./STM32_MPU9150eMPL/Libraries/CMSIS/Include/
 
 
@@ -79,10 +80,10 @@ SRC+=$(ST_LIB)/src/misc.c \
 	$(ST_LIB)/src/stm32f10x_tim.c \
 	$(ST_LIB)/src/stm32f10x_usart.c \
 	$(ST_LIB)/src/stm32f10x_wwdg.c \
-	$(ST_LIB_add)/STM32_CPAL_Driver/src/cpal_i2c.c \
-	$(ST_LIB_add)/STM32_CPAL_Driver/src/cpal_hal.c \
-	$(ST_LIB_add)/STM32_CPAL_Driver/src/cpal_usercallback_template.c \
-	$(ST_LIB_add)/STM32_CPAL_Driver/devices/stm32f10x/cpal_i2c_hal_stm32f10x.c
+	$(ST_LIB)/src/stm32f10x_wwdg.c \
+	./sdcard/lib/ff.c \
+	./sdcard/lib/diskio.c \
+	
     
 
 #MPU6050 Lib
@@ -104,13 +105,18 @@ SRC+=./USER/src/adc.c \
      ./USER/src/USART.c \
      ./USER/src/printf.c \
      ./USER/src/gps_functions.c \
-     ./STM32_MPU9150eMPL/Application/src/stm32_CPAL_mpu9150.c \
      ./USER/src/sensor.c \
      ./USER/src/joystick_command.c \
      ./USER/src/ahrs.c \
      ./USER/src/aimming.c \
+     ./USER/src/HMC5983.c \
      ./adding/src/algorithm_moveAve.c \
-     ./adding/src/algorithm_quaternion.c
+     ./adding/src/algorithm_quaternion.c \
+     ./sdcard/src/flash.c \
+     ./sdcard/src/spi.c \
+     ./sdcard/src/sd.c 
+
+
     
 
 

@@ -55,7 +55,7 @@ void body_aimming_angle()
 	vector_body_y = Mq21*vector_x_fc + Mq22*vector_y_fc + Mq23*vector_z_fc;
 	vector_body_z = Mq31*vector_x_fc + Mq32*vector_y_fc + Mq33*vector_z_fc;
 
-	printf("%f,%f,%f\r\n",vector_body_x,vector_body_y,vector_body_z);
+	//printf("%f,%f,%f\r\n",vector_body_x,vector_body_y,vector_body_z);
 
 	//printf("global_yaw,%f,global_pitch,%f\r\n",global_yaw,global_pitch);
 
@@ -74,6 +74,6 @@ void body_aimming_angle()
 		body_pitch= -body_pitch;
 	}
 
-	printf("body_yaw,%f,body_pitch,%f\r\n",body_yaw,body_pitch);
+	//printf("body_yaw,%f,body_pitch,%f\r\n",body_yaw,body_pitch);
 
 }

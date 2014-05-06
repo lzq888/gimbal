@@ -5,7 +5,9 @@ float 			acc_offset[3];
 float 			gyro_offset[3];
 
 float 			Ellipse[5] = {0};
+
 imu_buffer   	mpu6050_buf;
+int16_t 		magne[3];
 
 float 			mag_x_max = 0;
 float 			mag_x_min = 100;
@@ -630,6 +632,17 @@ void mpu_9150_data()
 		
 	//delay(10);
 
+}
+
+
+void HMC5983_DATA()
+{
+	read_HMC5983(magne);
+	mag_HMC5983.x = (magne[0]/1.0);//16384//8192
+	mag_HMC5983.z = (magne[1]/1.0);//16384//8192
+	mag_HMC5983.y = (magne[2]/1.0);//16384//8192
+	printf("%f,%f,%f\r\n",mag_HMC5983.x,mag_HMC5983.y,mag_HMC5983.z);
+	//printf("%f,%f,%f\r\n",magne[0],magne[1],magne[2]);
 }
 
 

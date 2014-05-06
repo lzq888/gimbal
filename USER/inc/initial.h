@@ -11,7 +11,7 @@
 #include "exti.h"
 #include "nvic.h"
 #include "MPU6050.h"
-#include "stm32_CPAL_mpu9150.h"
+
 
 
 

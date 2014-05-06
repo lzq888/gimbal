@@ -14,6 +14,7 @@ float 	magne_correction(float ASA);
 void 	initial_AccGyro();
 void 	initial_mag();
 void 	mpu_9150_data();
+void 	HMC5983_DATA();
 void   	EllipseFitting(float *Ans, s16 *MagDataX, s16 *MagDataY, u8 Num);
 
 #endif

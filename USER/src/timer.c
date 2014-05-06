@@ -47,7 +47,7 @@ void TIMER_Configuration(void)
 
 	/*TIMER2 */	
 	TIM_TimeBaseStructure.TIM_Period =99999;			  				//high voltage portion(between 0-period)
-  	TIM_TimeBaseStructure.TIM_Prescaler = 719;		
+  	TIM_TimeBaseStructure.TIM_Prescaler = 71;		
   	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
   	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
@@ -107,7 +107,8 @@ void TIM2_IRQHandler(void)
 	  	if(initial_flag==1)	
 		{
 			//printf("acc_x,%f,acc_y,%f,acc_z,%f,gyr_x,%f,gyr_y,%f,gyr_z,%f\r\n",
-			//acc.x,acc.y,acc.z,gyr.x,gyr.y,gyr.z);		
+			//acc.x,acc.y,acc.z,gyr.x,gyr.y,gyr.z);
+			//printf("%f %f %f %f %f %f %f %f %f\r\n",acc.x,acc.y,acc.z,gyr.x,gyr.y,gyr.z,ang.Pitch,ang.Roll,ang.Yaw);			
 			//printf("1,%f,2,%f,3,%f,4,%f,5,%f\r\n",mag.EllipseSita,mag.EllipseX0,mag.EllipseY0,mag.EllipseA,mag.EllipseB);						
 			//printf("%f  %f  %f\r\n",mag.x, mag.y, mag.z);
 			//printf("magne_Yaw,%f\r\n",ang.Yaw);
@@ -116,8 +117,11 @@ void TIM2_IRQHandler(void)
 			//printf("z : %f\r\n",gps.z);
 			//printf("x1,%f,y1,%f,z1,%f\r\n",target.x,target.y,target.z);
 			//printf("pitch,%f,roll,%f,yaw,%f\r\n",ang.Pitch, ang.Roll, ang.Yaw);
+			//printf("%f %f %f\r\n",ang.Pitch, ang.Roll, ang.Yaw);
 			//printf("yaw,%f,pitch,%f\r\n",global_yaw,global_pitch);
 			//printf("yaw,%f,pitch,%f\r\n",global_yaw,global_pitch);
+		
+
 		}
 
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
@@ -133,27 +137,17 @@ void TIM3_IRQHandler(void)
 		if(initial_flag==1)	
 		{
 
-			if (joystick.Remote_PWM_Pitch>4094)	           
+			if (body_pitch> 90 )	           
 			{
-				pwmvalue_a=2000;
+				pwmvalue_a = 2000;
 			}
-			else if (joystick.Remote_PWM_Pitch > 1070 && joystick.Remote_PWM_Pitch < 4094)
+			else if (body_pitch > 0 && body_pitch < 90)
 			{
 		
-				if(joystick.Remote_PWM_Pitch > 2400)
-				{
-					pwmvalue_a=1500+(joystick.Remote_PWM_Pitch-2400)*0.295;
-				}
-				else if	(joystick.Remote_PWM_Pitch > 2200 && joystick.Remote_PWM_Pitch < 2400)
-				{
-					pwmvalue_a=1500;
-				}
-				else if	(joystick.Remote_PWM_Pitch < 2200)
-				{
-					pwmvalue_a=1500+(joystick.Remote_PWM_Pitch-2200)*0.442;
-				}
+				pwmvalue_a = 1000 + (body_pitch) * 11.11;
+			
 			}			
-			else if(joystick.Remote_PWM_Pitch<1070)  
+			else if(body_pitch< 0 )  
 			{
 				pwmvalue_a=1000;
 			}
@@ -162,37 +156,22 @@ void TIM3_IRQHandler(void)
 
 		 /*yaw*/
 
-			if (joystick.Remote_PWM_Roll>4094)
+			if (body_yaw > 180 )
 			{
 				pwmvalue_b=2000;
 			}
-			else if (joystick.Remote_PWM_Roll>1170 && joystick.Remote_PWM_Roll<4094) 
+			else if (body_yaw > -180 && body_yaw < 180) 
 			{
-				if(joystick.Remote_PWM_Roll>2500)
-				{
-					pwmvalue_b=1500+(joystick.Remote_PWM_Roll-2500)*0.313;
-				}
-				else if	(joystick.Remote_PWM_Roll<2500 && joystick.Remote_PWM_Roll>2400)
-				{
-					pwmvalue_b=1500;	
-				}
-				else if	(joystick.Remote_PWM_Roll<2400)
-				{
-					pwmvalue_b=1500+(joystick.Remote_PWM_Roll-2400)*0.4065;
-				}
+				pwmvalue_b=1500+(body_yaw)*2.77;			
 			}		
-
-			else if(joystick.Remote_PWM_Roll<1170)  
+			else if(body_yaw < -180 )  
 			{
 				pwmvalue_b=1000;
 			}
 
-
 		PWMoutputB(pwmvalue_b);
-
-
 		}
-
+		
 		TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
 	}
 		
@@ -220,8 +199,8 @@ void TIM5_IRQHandler(void)
 		if(initial_flag==1)	
 		{
 			mpu_9150_data();
+			HMC5983_DATA();
 			ahrs_update();
-
 		}	
 		
 		TIM_ClearITPendingBit(TIM5, TIM_IT_Update);

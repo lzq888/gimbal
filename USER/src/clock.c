@@ -65,7 +65,7 @@ void RCC_Configuration(void)
 							, ENABLE);
 
 	/* APB1 clock enable */
-	RCC_APB1PeriphClockCmd(	
+	RCC_APB1PeriphClockCmd(	RCC_APB1Periph_SPI2 |
 							RCC_APB1Periph_TIM2 |
 							RCC_APB1Periph_TIM3 |
 							RCC_APB1Periph_TIM4 |

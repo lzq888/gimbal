@@ -4,6 +4,9 @@
 #define Kp 15.0f
 #define Ki 0.020f//0.02f
 
+#define w_mag 0.5f
+#define w_imu 0.5f//0.02f
+
 void AHRS_Init(Quaternion *pNumQ, EulerAngle *pAngE)
 {
 	pNumQ->q0 = 1.0f;
@@ -91,7 +94,7 @@ void ahrs_update()
 	Quaternion_Normalize(&qua);
 	/*convert quaternion to angle*/
 	Quaternion_ToAngE(&qua, &ang);
-
+	
 	/*compass yaw*/
 	//magn_x = ((mag.x - mag.EllipseX0) * arm_cos_f32(mag.EllipseSita) - (mag.y - mag.EllipseY0) * arm_sin_f32(mag.EllipseSita)) / mag.EllipseA;
 	//magn_y = ((mag.x - mag.EllipseX0) * arm_sin_f32(mag.EllipseSita) + (mag.y - mag.EllipseY0) * arm_cos_f32(mag.EllipseSita)) / mag.EllipseB;
@@ -110,7 +113,7 @@ void ahrs_update()
 	ang.Pitch = (ang.Pitch);
 	ang.Roll  = (ang.Roll);
 	ang.Yaw   = 2*(ang.Yaw);
-
+	
 	Mq11 = arm_cos_f32(ang.Pitch)*arm_cos_f32(ang.Yaw);
    	Mq12 = arm_cos_f32(ang.Pitch)*arm_sin_f32(ang.Yaw);
 	Mq13 = -arm_sin_f32(ang.Pitch);
@@ -138,22 +141,7 @@ void ahrs_update()
 	//printf("imus_Yaw,%f,magne_Yaw,%f\r\n",ang.Yaw,magn_yaw);
 	
 	/*complementory filter*/
-	//ang.Yaw = 1*magn_yaw; 
-
-
-
-
-
-
-
-
-
-
-
-	
-
-
-
+	//ang.Yaw = w_mag*magn_yaw + w_imu*ang.Yaw; 
 
 
 }

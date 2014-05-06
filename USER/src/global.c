@@ -28,6 +28,7 @@ u8      		correction_flag=0;
 sensor_acc		acc;
 sensor_gyro		gyr;
 sensor_magne    mag;
+sensor_magne    mag_HMC5983;
 
 
 /*for ahrs*/

@@ -30,6 +30,9 @@
 #include "stm32f10x_conf.h"
 #include "ahrs.h"
 #include "aimming.h"
+#include "spi.h"
+#include "HMC5983.h"
+
 
 
 
