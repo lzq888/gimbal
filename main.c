@@ -16,12 +16,6 @@ Description: This example shows how to use ADC function to capture 1 channel ana
 // Remark: N/A
 //*********************************************************
 
-float 	magn_x;
-float 	magn_y;
-float 	magn_yaw;
-
-u8 qq1,qq2,qq3,qq4,qq5,qq6;
-
 
 void send_byte(uint8_t b)
 {

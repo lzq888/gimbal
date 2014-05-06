@@ -415,6 +415,7 @@ void initial_mag()
 
 	for(int i=0;i<1000;i++)
 	{
+		/*
 		uint8_t 	tmp;
 		MPU6050_GetRawAccelGyro(mpu6050_buf.buff,mpu6050_buf.magne);
 		mag.x = (mpu6050_buf.magne[0]);//16384//8192
@@ -422,7 +423,7 @@ void initial_mag()
 		mag.z = (mpu6050_buf.magne[2]);//16384//8192
 
 		/*magne correction start*/
-		MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAX,7, 8, &tmp);
+		/*MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAX,7, 8, &tmp);
 		mpu6050_buf.magn_correct[0]=tmp;
     	MPU6050_ReadBits(AK8975_I2C_ADDR, AK8975_ASAY,7, 8, &tmp);
 		mpu6050_buf.magn_correct[1]=tmp;
@@ -433,50 +434,56 @@ void initial_mag()
 		mpu6050_buf.magn_correct[1] = ((mpu6050_buf.magn_correct[1]-128)*0.5/128.0)+1;
 		mpu6050_buf.magn_correct[2] = ((mpu6050_buf.magn_correct[2]-128)*0.5/128.0)+1;
 		/*magne correction over*/
-
+		/*
 		mag.x *= mpu6050_buf.magn_correct[0];//131/16.4
 		mag.y *= mpu6050_buf.magn_correct[1];//131/16.4
 		mag.z *= mpu6050_buf.magn_correct[2];//131/16.4
 		/*x direction*/
-		if(mag_x_min > mag.x )
+
+		read_HMC5983(magne);
+		mag_HMC5983.x = (magne[0]/1.0);//16384//8192
+		mag_HMC5983.z = (magne[1]/1.0);//16384//8192
+		mag_HMC5983.y = (magne[2]/1.0);//16384//8192
+
+		if(mag_x_min > mag_HMC5983.x )
 		{
-			mag_x_min = mag.x;
+			mag_x_min = mag_HMC5983.x;
 		}
-		if(mag.x > mag_x_max)
+		if(mag_HMC5983.x > mag_x_max)
 		{
-			mag_x_max = mag.x;
+			mag_x_max = mag_HMC5983.x;
 		}
 		/*y direction*/
-		if(mag_y_min > mag.y )
+		if(mag_y_min > mag_HMC5983.y )
 		{
-			mag_y_min = mag.y;
+			mag_y_min = mag_HMC5983.y;
 		}
-		if(mag.y > mag_y_max)
+		if(mag_HMC5983.y > mag_y_max)
 		{
-			mag_y_max = mag.y;
+			mag_y_max = mag_HMC5983.y;
 		}
 		/*z direction*/
-		if(mag_z_min > mag.z )
+		if(mag_z_min > mag_HMC5983.z )
 		{
-			mag_z_min = mag.z;
+			mag_z_min = mag_HMC5983.z;
 		}
-		if(mag.z > mag_z_max)
+		if(mag_HMC5983.z > mag_z_max)
 		{
-			mag_z_max = mag.z;
+			mag_z_max = mag_HMC5983.z;
 		}
 	
 		printf("min_x,%f,max_x,%f,min_y,%f,max_y,%f,min_z,%f,max_z,%f\r\n",mag_x_min,mag_x_max,mag_y_min,mag_y_max,mag_z_min,mag_z_max);
-		printf("mag_x,%f,mag_y,%f,mag_z,%f\r\n",mag.x, mag.y, mag.z);		
+		printf("mag_x,%f,mag_y,%f,mag_z,%f\r\n",mag_HMC5983.x, mag_HMC5983.y, mag_HMC5983.z);		
 	}
 
 
 	printf("magnetometer calibration finished\r\n");
-	mag.magx_offset = ( mag_x_min + mag_x_max )/2;
-	mag.magy_offset = ( mag_y_min + mag_y_max )/2;
-	mag.magz_offset = ( mag_z_min + mag_z_max )/2;
+	mag_HMC5983.magx_offset = ( mag_x_min + mag_x_max )/2;
+	mag_HMC5983.magy_offset = ( mag_y_min + mag_y_max )/2;
+	mag_HMC5983.magz_offset = ( mag_z_min + mag_z_max )/2;
 	//mag.magz_range  = abs(( mag_max - mag_min )/2);
 
-	printf("magx_offset,%f,magy_offset,%f,magz_offset,%f\r\n",mag.magx_offset,mag.magy_offset,mag.magz_offset);
+	printf("magx_offset,%f,magy_offset,%f,magz_offset,%f\r\n",mag_HMC5983.magx_offset,mag_HMC5983.magy_offset,mag_HMC5983.magz_offset);
 
 	/*direction Z+*/
 /*
@@ -637,11 +644,14 @@ void mpu_9150_data()
 
 void HMC5983_DATA()
 {
+	float 	magn_yaw1;
 	read_HMC5983(magne);
 	mag_HMC5983.x = (magne[0]/1.0);//16384//8192
 	mag_HMC5983.z = (magne[1]/1.0);//16384//8192
 	mag_HMC5983.y = (magne[2]/1.0);//16384//8192
-	printf("%f,%f,%f\r\n",mag_HMC5983.x,mag_HMC5983.y,mag_HMC5983.z);
+	//magn_yaw1 = toDeg(atan2f(mag_HMC5983.x, mag_HMC5983.y));
+	//printf("%f\r\n",magn_yaw1);
+	//printf("%f,%f,%f\r\n",mag_HMC5983.x,mag_HMC5983.y,mag_HMC5983.z);
 	//printf("%f,%f,%f\r\n",magne[0],magne[1],magne[2]);
 }
 

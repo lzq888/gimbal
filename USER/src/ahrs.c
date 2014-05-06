@@ -98,9 +98,9 @@ void ahrs_update()
 	/*compass yaw*/
 	//magn_x = ((mag.x - mag.EllipseX0) * arm_cos_f32(mag.EllipseSita) - (mag.y - mag.EllipseY0) * arm_sin_f32(mag.EllipseSita)) / mag.EllipseA;
 	//magn_y = ((mag.x - mag.EllipseX0) * arm_sin_f32(mag.EllipseSita) + (mag.y - mag.EllipseY0) * arm_cos_f32(mag.EllipseSita)) / mag.EllipseB;
-	magn_x = (mag.x - mag.magx_offset);
-	magn_y = (mag.y - mag.magy_offset);
-	magn_z = (mag.z - mag.magz_offset);
+	magn_x = (mag_HMC5983.x - mag_HMC5983.magx_offset);
+	magn_y = (mag_HMC5983.y - mag_HMC5983.magy_offset);
+	magn_z = (mag_HMC5983.z - mag_HMC5983.magz_offset);
 	//magn_yaw = toDeg(atan2f(magn_x, magn_y));
 	//printf("%f %f %f %f\r\n",magn_x,magn_y,magn_z,magn_yaw);
 
@@ -108,11 +108,13 @@ void ahrs_update()
 	magn_x = magn_x * arm_cos_f32(ang.Pitch) + magn_y * arm_sin_f32(ang.Pitch) * arm_sin_f32(ang.Roll) - magn_z * arm_cos_f32(ang.Roll) * arm_sin_f32(ang.Pitch);
 	magn_y = magn_y * arm_cos_f32(ang.Roll) + magn_z * arm_sin_f32(ang.Roll);
 	magn_yaw = toDeg(atan2f(magn_x, magn_y));
-	//printf("magne_Yaw,%f\r\n",magn_yaw);
+	
 
 	ang.Pitch = (ang.Pitch);
 	ang.Roll  = (ang.Roll);
 	ang.Yaw   = 2*(ang.Yaw);
+
+
 	
 	Mq11 = arm_cos_f32(ang.Pitch)*arm_cos_f32(ang.Yaw);
    	Mq12 = arm_cos_f32(ang.Pitch)*arm_sin_f32(ang.Yaw);
@@ -129,6 +131,7 @@ void ahrs_update()
 	ang.Roll  = toDeg(ang.Roll);
 	ang.Yaw   = toDeg(ang.Yaw);
 
+
 	if(ang.Yaw > 180)
 	{
 		ang.Yaw = ang.Yaw - 360;
@@ -137,6 +140,8 @@ void ahrs_update()
 	{
 		ang.Yaw = ang.Yaw + 360;
 	}
+
+	printf("pitch,%f,roll,%f,yaw,%f,magne_Yaw,%f\r\n",ang.Pitch,ang.Roll,ang.Yaw,magn_yaw);
 	//printf("ang.Pitch,%f,ang.Roll,%f,ang.Yaw,%f\r\n",ang.Pitch,ang.Roll,ang.Yaw);
 	//printf("imus_Yaw,%f,magne_Yaw,%f\r\n",ang.Yaw,magn_yaw);
 	
