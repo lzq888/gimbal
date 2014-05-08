@@ -1,11 +1,17 @@
 #include "ahrs.h"
 #include "config.h"
-
+/*mahony filter*/
 #define Kp 15.0f
 #define Ki 0.020f//0.02f
-
+/*complementory filter*/
 #define w_mag 0.5f
 #define w_imu 0.5f//0.02f
+/*low pass filter*/
+#define tau 0.01f
+#define dt  0.01f
+ 
+float 		last_GyrZ;
+EulerAngle 	last_ang;
 
 void AHRS_Init(Quaternion *pNumQ, EulerAngle *pAngE)
 {
@@ -21,6 +27,8 @@ void AHRS_Init(Quaternion *pNumQ, EulerAngle *pAngE)
 
 void ahrs_update()
 {
+	float 	difference = 0;
+
 	float 	magn_x = 0;
 	float 	magn_y = 0;
 	float   magn_z = 0;
@@ -41,6 +49,7 @@ void ahrs_update()
 	static float AngZ_Temp = 0.0f;
 	static float exInt = 0.0f, eyInt = 0.0f, ezInt = 0.0f;
 
+	float 	klpf = 0;
 	/*ACC,GYRO altitude*/
 
 	/*normalize acc value*/
@@ -86,7 +95,16 @@ void ahrs_update()
 	GyrY = GyrY + Kp * ErrY + eyInt;
 	GyrZ = GyrZ + Kp * ErrZ + ezInt;
 
-	//printf("GyrX,%f,GyrY,%f,GyrZ,%f\r\n",GyrX,GyrY,GyrZ);
+	/*GyrZ drift correction*/
+	/*
+	difference = (GyrZ - last_GyrZ);
+	if(difference < 0.005 && difference > -0.005)
+	{
+		GyrZ = 0.0;
+	}
+	last_GyrZ = GyrZ;
+
+	//printf("%f,%f\r\n",difference,GyrZ);
 
 	/*use correct gyr value to update quaternion*/
 	Quaternion_RungeKutta(&qua, GyrX, GyrY, GyrZ, 0.005f);
@@ -94,7 +112,17 @@ void ahrs_update()
 	Quaternion_Normalize(&qua);
 	/*convert quaternion to angle*/
 	Quaternion_ToAngE(&qua, &ang);
-	
+
+	/*low pass filter*/
+	klpf = dt/(tau+dt);
+	ang.Pitch = last_ang.Pitch + klpf * (ang.Pitch - last_ang.Pitch);
+	ang.Roll  = last_ang.Roll  + klpf * (ang.Roll  - last_ang.Roll );
+	//ang.Yaw   = last_ang.Yaw   + klpf * (ang.Yaw   - last_ang.Yaw  );
+
+	last_ang.Pitch = ang.Pitch;
+	last_ang.Roll  = ang.Roll;
+	//last_ang.Yaw   = ang.Yaw;
+
 	/*compass yaw*/
 	//magn_x = ((mag.x - mag.EllipseX0) * arm_cos_f32(mag.EllipseSita) - (mag.y - mag.EllipseY0) * arm_sin_f32(mag.EllipseSita)) / mag.EllipseA;
 	//magn_y = ((mag.x - mag.EllipseX0) * arm_sin_f32(mag.EllipseSita) + (mag.y - mag.EllipseY0) * arm_cos_f32(mag.EllipseSita)) / mag.EllipseB;
@@ -107,31 +135,27 @@ void ahrs_update()
 	/*mag_yaw_correction*/
 	magn_x = magn_x * arm_cos_f32(ang.Pitch) + magn_y * arm_sin_f32(ang.Pitch) * arm_sin_f32(ang.Roll) - magn_z * arm_cos_f32(ang.Roll) * arm_sin_f32(ang.Pitch);
 	magn_y = magn_y * arm_cos_f32(ang.Roll) + magn_z * arm_sin_f32(ang.Roll);
-	magn_yaw = toDeg(atan2f(magn_x, magn_y));
-	
-
+	magn_yaw = atan2f(magn_x, magn_y);
+/*	
 	ang.Pitch = (ang.Pitch);
 	ang.Roll  = (ang.Roll);
-	ang.Yaw   = 2*(ang.Yaw);
-
-
-	
-	Mq11 = arm_cos_f32(ang.Pitch)*arm_cos_f32(ang.Yaw);
-   	Mq12 = arm_cos_f32(ang.Pitch)*arm_sin_f32(ang.Yaw);
+	ang.Yaw   = 5.2*(ang.Yaw);
+*/	
+	Mq11 = arm_cos_f32(ang.Pitch)*arm_cos_f32(magn_yaw);
+   	Mq12 = arm_cos_f32(ang.Pitch)*arm_sin_f32(magn_yaw);
 	Mq13 = -arm_sin_f32(ang.Pitch);
-  	Mq21 = arm_cos_f32(ang.Yaw)*arm_sin_f32(ang.Pitch)*arm_sin_f32(ang.Roll) - arm_cos_f32(ang.Roll)*arm_sin_f32(ang.Yaw);
-   	Mq22 = arm_sin_f32(ang.Yaw)*arm_sin_f32(ang.Pitch)*arm_sin_f32(ang.Roll) + arm_cos_f32(ang.Roll)*arm_cos_f32(ang.Yaw);
+  	Mq21 = arm_cos_f32(magn_yaw)*arm_sin_f32(ang.Pitch)*arm_sin_f32(ang.Roll) - arm_cos_f32(ang.Roll)*arm_sin_f32(magn_yaw);
+   	Mq22 = arm_sin_f32(magn_yaw)*arm_sin_f32(ang.Pitch)*arm_sin_f32(ang.Roll) + arm_cos_f32(ang.Roll)*arm_cos_f32(magn_yaw);
 	Mq23 = arm_cos_f32(ang.Pitch)*arm_sin_f32(ang.Roll);
-   	Mq31 = arm_cos_f32(ang.Roll)*arm_cos_f32(ang.Yaw)*arm_sin_f32(ang.Pitch) + arm_sin_f32(ang.Roll)*arm_sin_f32(ang.Yaw);
-   	Mq32 = arm_sin_f32(ang.Yaw)*arm_sin_f32(ang.Pitch)*arm_cos_f32(ang.Roll) - arm_sin_f32(ang.Roll)*arm_cos_f32(ang.Yaw);
+   	Mq31 = arm_cos_f32(ang.Roll)*arm_cos_f32(magn_yaw)*arm_sin_f32(ang.Pitch) + arm_sin_f32(ang.Roll)*arm_sin_f32(magn_yaw);
+   	Mq32 = arm_sin_f32(magn_yaw)*arm_sin_f32(ang.Pitch)*arm_cos_f32(ang.Roll) - arm_sin_f32(ang.Roll)*arm_cos_f32(magn_yaw);
 	Mq33 = arm_cos_f32(ang.Pitch)*arm_cos_f32(ang.Roll);
 
 	/*altitude*/
 	ang.Pitch = toDeg(ang.Pitch);
 	ang.Roll  = toDeg(ang.Roll);
-	ang.Yaw   = toDeg(ang.Yaw);
-
-
+	ang.Yaw =  toDeg(magn_yaw);
+/*
 	if(ang.Yaw > 180)
 	{
 		ang.Yaw = ang.Yaw - 360;
@@ -140,8 +164,9 @@ void ahrs_update()
 	{
 		ang.Yaw = ang.Yaw + 360;
 	}
-
-	printf("pitch,%f,roll,%f,yaw,%f,magne_Yaw,%f\r\n",ang.Pitch,ang.Roll,ang.Yaw,magn_yaw);
+*/
+	
+	//printf("pitch,%f,roll,%f,magne_Yaw,%f\r\n",ang.Pitch,ang.Roll,magn_yaw);
 	//printf("ang.Pitch,%f,ang.Roll,%f,ang.Yaw,%f\r\n",ang.Pitch,ang.Roll,ang.Yaw);
 	//printf("imus_Yaw,%f,magne_Yaw,%f\r\n",ang.Yaw,magn_yaw);
 	

@@ -15,6 +15,7 @@ void 	initial_AccGyro();
 void 	initial_mag();
 void 	mpu_9150_data();
 void 	HMC5983_DATA();
+void 	fit_Gyro_with_Magn();
 void   	EllipseFitting(float *Ans, s16 *MagDataX, s16 *MagDataY, u8 Num);
 
 #endif

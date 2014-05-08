@@ -13,7 +13,7 @@ void TIMER_Configuration(void)
 
 
     /*TIMER5 */	
-    TIM_TimeBaseStructure.TIM_Period =(uint16_t)(20000-1);			  			//period
+    TIM_TimeBaseStructure.TIM_Period =(uint16_t)(100000-1);			  			//period
   	TIM_TimeBaseStructure.TIM_Prescaler = (uint16_t)(72-1);  						//high voltage portion(between 0-period)	
   	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
@@ -21,7 +21,7 @@ void TIMER_Configuration(void)
 	TIM_Cmd(TIM5, ENABLE);
 	TIM_ITConfig(TIM5, TIM_IT_Update, ENABLE); 
 
-	/*72MHz/((9999+1)*(72))=100Hz*/
+	/*72MHz/((99999+1)*(72))=10Hz*/
 						
     /*TIMER4 */	
     TIM_TimeBaseStructure.TIM_Period =(uint16_t)(1000-1);			  			//period
@@ -47,7 +47,7 @@ void TIMER_Configuration(void)
 
 	/*TIMER2 */	
 	TIM_TimeBaseStructure.TIM_Period =99999;			  				//high voltage portion(between 0-period)
-  	TIM_TimeBaseStructure.TIM_Prescaler = 71;		
+  	TIM_TimeBaseStructure.TIM_Prescaler = 719;		
   	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
   	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
@@ -55,7 +55,7 @@ void TIMER_Configuration(void)
 	TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
 		   			
 	
-	/*72MHz/((19999+1)*(71+1))=1Hz*/																																																							
+	/*72MHz/((99999+1)*(719+1))=1Hz*/																																																							
 }
 
 void PWMoutputA(u16 i) 													
@@ -99,7 +99,7 @@ void PWMoutputD(u16 n)
 	TIM_OC1Init(TIM3, &TIM_OCInitStructure);         //TIM_OC3(channel~¬dªí
 	
 }
-/*10hz*/
+/*1hz*/
 void TIM2_IRQHandler(void)
 {
 	if(TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET) 
@@ -110,13 +110,13 @@ void TIM2_IRQHandler(void)
 			//acc.x,acc.y,acc.z,gyr.x,gyr.y,gyr.z);
 			//printf("%f %f %f %f %f %f %f %f %f\r\n",acc.x,acc.y,acc.z,gyr.x,gyr.y,gyr.z,ang.Pitch,ang.Roll,ang.Yaw);			
 			//printf("1,%f,2,%f,3,%f,4,%f,5,%f\r\n",mag.EllipseSita,mag.EllipseX0,mag.EllipseY0,mag.EllipseA,mag.EllipseB);						
-			//printf("%f  %f  %f\r\n",mag.x, mag.y, mag.z);
+			//printf("%f  %f  %f\r\n",mag_HMC5983.x, mag_HMC5983.y, mag_HMC5983.z);
 			//printf("magne_Yaw,%f\r\n",ang.Yaw);
 			//printf("x : %f\r\n",gps.x);
 			//printf("y : %f\r\n",gps.y);
 			//printf("z : %f\r\n",gps.z);
 			//printf("x1,%f,y1,%f,z1,%f\r\n",target.x,target.y,target.z);
-			//printf("pitch,%f,roll,%f,yaw,%f\r\n",ang.Pitch, ang.Roll, ang.Yaw);
+			printf("pitch,%f,roll,%f,yaw,%f\r\n",ang.Pitch, ang.Roll, ang.Yaw);
 			//printf("%f %f %f\r\n",ang.Pitch, ang.Roll, ang.Yaw);
 			//printf("yaw,%f,pitch,%f\r\n",global_yaw,global_pitch);
 			//printf("yaw,%f,pitch,%f\r\n",global_yaw,global_pitch);
@@ -191,7 +191,7 @@ void TIM4_IRQHandler(void)
 		TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
 	}
 }
-/*100hz*/
+/*10hz*/
 void TIM5_IRQHandler(void)
 {
 	if(TIM_GetITStatus(TIM5, TIM_IT_Update) != RESET) 

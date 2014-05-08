@@ -263,9 +263,9 @@ void get_gps_data()
 					gps.y=y;
 					gps.z=z;
 
-					//printf("x : %f\r\n",gps.x);
-					//printf("y : %f\r\n",gps.y);
-					//printf("z : %f\r\n",gps.z);
+					printf("x : %f\r\n",gps.x);
+					printf("y : %f\r\n",gps.y);
+					printf("z : %f\r\n",gps.z);
 					//printf("latitude : %f\r\n",gga.latitude_value);
 					//printf("longutitude : %f\r\n",gga.longtitude_value);
 					//printf("height : %f\r\n",gga.height_value);

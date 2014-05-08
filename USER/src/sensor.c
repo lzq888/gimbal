@@ -644,16 +644,31 @@ void mpu_9150_data()
 
 void HMC5983_DATA()
 {
-	float 	magn_yaw1;
+	
 	read_HMC5983(magne);
 	mag_HMC5983.x = (magne[0]/1.0);//16384//8192
 	mag_HMC5983.z = (magne[1]/1.0);//16384//8192
 	mag_HMC5983.y = (magne[2]/1.0);//16384//8192
-	//magn_yaw1 = toDeg(atan2f(mag_HMC5983.x, mag_HMC5983.y));
-	//printf("%f\r\n",magn_yaw1);
+	
+	
 	//printf("%f,%f,%f\r\n",mag_HMC5983.x,mag_HMC5983.y,mag_HMC5983.z);
 	//printf("%f,%f,%f\r\n",magne[0],magne[1],magne[2]);
 }
+
+void fit_Gyro_with_Magn()
+{
+	float 	magn_yaw1;
+	for(int i=0;i<1000;i++)
+	{
+		HMC5983_DATA();
+		magn_yaw1 = toDeg(atan2f(mag_HMC5983.x, mag_HMC5983.y));
+		printf("%f\r\n",magn_yaw1);
+	}
+	printf("Fitting ok!\r\n");
+}
+
+
+
 
 
 /*=====================================================================================================*/
