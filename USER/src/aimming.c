@@ -68,12 +68,12 @@ void body_aimming_angle()
 		body_yaw  = body_yaw + 180.0;
 		body_pitch= 180.0 - body_pitch;
 	}
-	else if(body_pitch < 0.0)
+/*	else if(body_pitch < 0.0)
 	{
 		body_yaw  = body_yaw + 180.0;
 		body_pitch= -body_pitch;
 	}
-
-	//printf("body_yaw,%f,body_pitch,%f\r\n",body_yaw,body_pitch);
+*/
+	printf("body_yaw,%f,body_pitch,%f\r\n",body_yaw,body_pitch);
 
 }
