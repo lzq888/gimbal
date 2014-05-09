@@ -164,25 +164,25 @@ bool findGPGGA()
 }
 
 
-void get_gps_data()
+void get_gps_data(u8 data)
 {
 
-		if(gps_buf!=0)
+		if(data!=0)
 		{	
 			/*resort gps info (every kind)*/	
 			if(gga_flags.gps_start_flag==1)
 			{
-				gga_buffer.gps_buf_string[word_count]=gps_buf;
+				gga_buffer.gps_buf_string[word_count] = data;
 				word_count++;
 				gga_flags.gps_word_count++;
 			}
 			/*start word*/	
-			if(gps_buf=='$')
+			if(data == '$')
 			{
 				gga_flags.gps_start_flag=1;
 			}
 			/*final word*/
-			if(gps_buf=='\n')
+			if(data == '\n')
 			{
 				gga_flags.gps_start_flag=0;
 				word_count=0;
@@ -190,7 +190,7 @@ void get_gps_data()
 				/*store over*/
 			}
 
-			gps_buf=0;		
+			data = 0;		
 		}
 
 
@@ -263,9 +263,9 @@ void get_gps_data()
 					gps.y=y;
 					gps.z=z;
 
-					//printf("x : %f\r\n",gps.x);
-					//printf("y : %f\r\n",gps.y);
-					//printf("z : %f\r\n",gps.z);
+					printf("x : %f\r\n",gps.x);
+					printf("y : %f\r\n",gps.y);
+					printf("z : %f\r\n",gps.z);
 					//printf("latitude : %f\r\n",gga.latitude_value);
 					//printf("longutitude : %f\r\n",gga.longtitude_value);
 					//printf("height : %f\r\n",gga.height_value);

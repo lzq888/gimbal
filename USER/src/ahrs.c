@@ -167,7 +167,7 @@ void ahrs_update()
 */
 	
 	//printf("pitch,%f,roll,%f,magne_Yaw,%f\r\n",ang.Pitch,ang.Roll,magn_yaw);
-	//printf("ang.Pitch,%f,ang.Roll,%f,ang.Yaw,%f\r\n",ang.Pitch,ang.Roll,ang.Yaw);
+	printf("ang.Pitch,%f,ang.Roll,%f,ang.Yaw,%f\r\n",ang.Pitch,ang.Roll,ang.Yaw);
 	//printf("imus_Yaw,%f,magne_Yaw,%f\r\n",ang.Yaw,magn_yaw);
 	
 	/*complementory filter*/

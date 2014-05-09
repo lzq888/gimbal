@@ -68,6 +68,7 @@ extern  u8      		timer_buf;
 extern  u16     		difference[4];
 extern  Remote_signal   joystick;
 /*for gps*/
+extern  u8  			gps_buf1[100];
 extern  u8  			gps_buf;
 extern  sensor_gps		gps;
 extern  sensor_gps		target;

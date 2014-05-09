@@ -187,6 +187,7 @@ void USART2_IRQHandler(void)
 	U2_RxData =USART_ReceiveData(USART2); //Get Data Á×§K¦]¬°¹L¸ü¤¤Â_²£¥Í·í¾÷¦ý¬OÁÙ¬O¤£§¹¾ã                   
 	}
 }
+/*
 void USART3_IRQHandler(void)                
 { 
 
@@ -213,5 +214,9 @@ void USART3_IRQHandler(void)
 	{
 	U3_RxData =USART_ReceiveData(USART3); //Get Data Á×§K¦]¬°¹L¸ü¤¤Â_²£¥Í·í¾÷¦ý¬OÁÙ¬O¤£§¹¾ã                   
 	}
+	
 }
+*/
+
+
 

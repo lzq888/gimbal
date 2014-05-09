@@ -13,7 +13,7 @@ void TIMER_Configuration(void)
 
 
     /*TIMER5 */	
-    TIM_TimeBaseStructure.TIM_Period =(uint16_t)(100000-1);			  			//period
+    TIM_TimeBaseStructure.TIM_Period =(uint16_t)(10000-1);			  			//period
   	TIM_TimeBaseStructure.TIM_Prescaler = (uint16_t)(72-1);  						//high voltage portion(between 0-period)	
   	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
@@ -191,13 +191,17 @@ void TIM4_IRQHandler(void)
 		TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
 	}
 }
-/*10hz*/
+/*100hz*/
 void TIM5_IRQHandler(void)
 {
 	if(TIM_GetITStatus(TIM5, TIM_IT_Update) != RESET) 
 	{			  			
 		if(initial_flag==1)	
 		{
+			for(int i=0;i<100;i++)
+			{
+				get_gps_data(gps_buf1[i]);
+			}
 			mpu_9150_data();
 			HMC5983_DATA();
 			ahrs_update();

@@ -14,6 +14,7 @@ Remote_signal   joystick;
 
 u8      		timer_buf=0;
 /*for gps*/
+u8  			gps_buf1[100];
 u8  			gps_buf;
 sensor_gps		gps;
 sensor_gps		target;

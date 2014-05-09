@@ -14,7 +14,7 @@ void Initial_MCU(void)
  	/*Configure ADC2*/
 	Configure_ADC1();
    	/*DMA Configuration*/
-	DMA1_Channel1_Configuration();
+	DMA1_Channel3_Configuration();
 
 	MPU6050_I2C_Init();
 	MPU6050_Initialize();

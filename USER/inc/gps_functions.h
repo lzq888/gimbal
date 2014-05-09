@@ -40,6 +40,6 @@ float 	m2dec_lad(char* buffer);
 float 	m2dec_lon(char* buffer);
 void  	gga2twd97(float lat,float lon,float *x,float *y);
 bool 	findGPGGA();
-void 	get_gps_data();
+void 	get_gps_data(u8 data);
 #endif
 
