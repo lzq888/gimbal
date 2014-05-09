@@ -51,6 +51,8 @@ void delay(uint32_t delay_count)
 	AHRS_Init(&(qua),&(ang));
 	target_initial();
 
+	USART_Config( USART2, 115200) ;  //for joystick
+	USART_DMACmd(USART2, USART_DMAReq_Rx, ENABLE);
 	USART_Config( USART3, 115200);     //for gps
 	USART_DMACmd(USART3, USART_DMAReq_Rx, ENABLE);
 	
@@ -59,7 +61,8 @@ void delay(uint32_t delay_count)
 	while(1)
 	{	
 			
-		//body_aimming_angle();
+		body_aimming_angle();
+		
 		//get_gps_data();
 		//printf("magne_Yaw,%f\r\n",ang.Yaw);
 

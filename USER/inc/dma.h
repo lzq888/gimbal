@@ -5,5 +5,6 @@
 
 #include "alientek.h"
 void DMA1_Channel3_Configuration(void);
+void DMA1_Channel6_Configuration(void);
 #endif
 

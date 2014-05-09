@@ -205,6 +205,10 @@ void TIM5_IRQHandler(void)
 			mpu_9150_data();
 			HMC5983_DATA();
 			ahrs_update();
+			for(int i=0;i<100;i++)
+			{
+				get_joystck_command(joystick_buffer[i]);
+			}
 		}	
 		
 		TIM_ClearITPendingBit(TIM5, TIM_IT_Update);

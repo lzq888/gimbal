@@ -18,11 +18,11 @@ u16		checksum_flag=0;
 u8      difference_count=0;
 
 
-void get_joystck_command()
+void get_joystck_command(u8 data)
 {
 
 
-	if(timer_buf!=0)
+	if(data!=0)
 	{	
      
 	  if(start_flag==1)					   //start  store data into input_buffer
@@ -39,16 +39,16 @@ void get_joystck_command()
 			USART_SendData(USART1,'\n'); 	
 	  		while(USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET)	;
 		}
-		input_buffer[count] = timer_buf;  	
+		input_buffer[count] = data;  	
 	  	count++;
 		length++;  					
 	  }
-	    if(timer_buf=='$') 
+	    if(data=='$') 
 	  	{
 	  		start_flag=1;		//start sign received 
 	  	}
 
-	  	if(timer_buf=='\n') 
+	  	if(data=='\n') 
 		{
 		start_flag=0;
 	  	final_flag=1;

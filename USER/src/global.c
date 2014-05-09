@@ -11,7 +11,7 @@ u8      		timer_buf_flag=0;
 u16     		difference[4] = {0,0,0,0};
 Remote_signal   joystick;
 
-
+u8      		joystick_buffer[100];
 u8      		timer_buf=0;
 /*for gps*/
 u8  			gps_buf1[100];
