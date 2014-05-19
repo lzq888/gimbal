@@ -85,6 +85,7 @@ extern  sensor_acc		acc;
 extern  sensor_gyro		gyr;
 extern  sensor_magne    mag;
 extern  sensor_magne    mag_HMC5983;
+extern  u16 			mag_buf[100];
 
 
 /*for ahrs*/

@@ -1,8 +1,8 @@
 
 #include "config.h"
 
-u16 	pwmvalue_a;
-u16 	pwmvalue_b;	
+u16 	pwmvalue_a = 1000;
+u16 	pwmvalue_b = 1450;	
 u16 	pwmvalue_c;
 u16 	pwmvalue_d;
 
@@ -21,7 +21,7 @@ void TIMER_Configuration(void)
 	TIM_Cmd(TIM5, ENABLE);
 	TIM_ITConfig(TIM5, TIM_IT_Update, ENABLE); 
 
-	/*72MHz/((99999+1)*(72))=10Hz*/
+	/*72MHz/((9999+1)*(72))=100Hz*/
 						
     /*TIMER4 */	
     TIM_TimeBaseStructure.TIM_Period =(uint16_t)(1000-1);			  			//period
@@ -121,7 +121,7 @@ void TIM2_IRQHandler(void)
 			//printf("yaw,%f,pitch,%f\r\n",global_yaw,global_pitch);
 			//printf("yaw,%f,pitch,%f\r\n",global_yaw,global_pitch);
 		
-
+			printf("%f %f %f %f %f %f %f %f \r\n",ang.Pitch,ang.Roll,ang.Yaw,gps.x,gps.y,gps.z,body_pitch,body_yaw);
 		}
 
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
@@ -137,39 +137,107 @@ void TIM3_IRQHandler(void)
 		if(initial_flag==1)	
 		{
 
-			if (body_pitch> 90 )	           
+			body_aimming_angle();
+			/*aiming mode*/
+			if(joystick.Remote_on_off==0)
 			{
-				pwmvalue_a = 2000;
-			}
-			else if (body_pitch > 0 && body_pitch < 90)
-			{
-		
-				pwmvalue_a = 1000 + (body_pitch) * 11.11;
-			
-			}			
-			else if(body_pitch< 0 )  
-			{
-				pwmvalue_a=1000;
+				if (body_pitch> 90 )	           
+				{
+					pwmvalue_a = 2000 ;
+				}
+				else if (body_pitch > 0 && body_pitch < 90)
+				{
+					pwmvalue_a = 1000 + (body_pitch) * 11.11;
+				}			
+				else if(body_pitch< 0 )  
+				{
+					pwmvalue_a = 1000;
+				}
+
+				PWMoutputA(pwmvalue_a);
+
+		 		/*yaw*/
+
+				if (body_yaw > 180 )
+				{
+					pwmvalue_b = 1000 + yaw_offset;
+				}
+				else if (body_yaw > -180 && body_yaw < 180) 
+				{
+					pwmvalue_b = 1500 - (body_yaw)*2.77 + yaw_offset;			
+				}		
+				else if(body_yaw < -180 )  
+				{
+					pwmvalue_b = 2000 + yaw_offset;
+				}
+
+				PWMoutputB(pwmvalue_b);
 			}
 
-		PWMoutputA(pwmvalue_a);
-
-		 /*yaw*/
-
-			if (body_yaw > 180 )
+			/*joystick mode*/
+			if(joystick.Remote_on_off==1)
 			{
-				pwmvalue_b=2000;
+
+				
+				if (joystick.Remote_PWM_Pitch < 1000 )	           
+				{
+					pwmvalue_a += 2 ;
+				}
+				else if (joystick.Remote_PWM_Pitch > 1000 && joystick.Remote_PWM_Pitch < 1900)
+				{
+					pwmvalue_a +=1 ;
+				}			
+				else if(joystick.Remote_PWM_Pitch > 1900 && joystick.Remote_PWM_Pitch < 2100 )  
+				{
+					
+				}
+				else if(joystick.Remote_PWM_Pitch > 2100 && joystick.Remote_PWM_Pitch < 3000 )  
+				{
+					pwmvalue_a -= 1;
+				}
+				else if(joystick.Remote_PWM_Pitch > 3000 && joystick.Remote_PWM_Pitch < 4100 )  
+				{
+					pwmvalue_a -= 2;
+				}
+
+				if(pwmvalue_a > 2000) pwmvalue_a = 2000;
+				if(pwmvalue_a < 1000) pwmvalue_a = 1000;
+
+				PWMoutputA(pwmvalue_a);
+
+		 		/*yaw*/
+
+				if (joystick.Remote_PWM_Yaw < 1000 )	           
+				{
+					pwmvalue_b -= 4 ;
+				}
+				else if (joystick.Remote_PWM_Yaw > 1000 && joystick.Remote_PWM_Yaw < 1900)
+				{
+					pwmvalue_b -= 2 ;
+				}			
+				else if(joystick.Remote_PWM_Yaw > 1900 && joystick.Remote_PWM_Yaw < 2200 )  
+				{
+					
+				}
+				else if(joystick.Remote_PWM_Yaw > 2200 && joystick.Remote_PWM_Yaw < 3000 )  
+				{
+					pwmvalue_b += 2;
+				}
+				else if(joystick.Remote_PWM_Yaw > 3000 && joystick.Remote_PWM_Yaw < 4100 )  
+				{
+					pwmvalue_b += 4;
+				}
+
+				if(pwmvalue_b > 2000) pwmvalue_b = 2000;
+				if(pwmvalue_b < 1000) pwmvalue_b = 1000;
+
+
+				PWMoutputB(pwmvalue_b);
+
 			}
-			else if (body_yaw > -180 && body_yaw < 180) 
-			{
-				pwmvalue_b=1500+(body_yaw)*2.77;			
-			}		
-			else if(body_yaw < -180 )  
-			{
-				pwmvalue_b=1000;
-			}
 
-		PWMoutputB(pwmvalue_b);
+			printf("PWM_P,%d,PWM_Y,%d\r\n",pwmvalue_a, pwmvalue_b);
+	
 		}
 		
 		TIM_ClearITPendingBit(TIM3, TIM_IT_Update);

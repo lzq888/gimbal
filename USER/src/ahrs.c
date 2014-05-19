@@ -114,14 +114,15 @@ void ahrs_update()
 	Quaternion_ToAngE(&qua, &ang);
 
 	/*low pass filter*/
+	
 	klpf = dt/(tau+dt);
 	ang.Pitch = last_ang.Pitch + klpf * (ang.Pitch - last_ang.Pitch);
 	ang.Roll  = last_ang.Roll  + klpf * (ang.Roll  - last_ang.Roll );
-	//ang.Yaw   = last_ang.Yaw   + klpf * (ang.Yaw   - last_ang.Yaw  );
+	ang.Yaw   = last_ang.Yaw   + klpf * (ang.Yaw   - last_ang.Yaw  );
 
 	last_ang.Pitch = ang.Pitch;
 	last_ang.Roll  = ang.Roll;
-	//last_ang.Yaw   = ang.Yaw;
+	last_ang.Yaw   = ang.Yaw;
 
 	/*compass yaw*/
 	//magn_x = ((mag.x - mag.EllipseX0) * arm_cos_f32(mag.EllipseSita) - (mag.y - mag.EllipseY0) * arm_sin_f32(mag.EllipseSita)) / mag.EllipseA;
@@ -167,9 +168,9 @@ void ahrs_update()
 */
 	
 	//printf("pitch,%f,roll,%f,magne_Yaw,%f\r\n",ang.Pitch,ang.Roll,magn_yaw);
-	printf("ang.Pitch,%f,ang.Roll,%f,ang.Yaw,%f\r\n",ang.Pitch,ang.Roll,ang.Yaw);
+	//printf("ang.Pitch,%f,ang.Roll,%f,ang.Yaw,%f\r\n",ang.Pitch,ang.Roll,ang.Yaw);
 	//printf("imus_Yaw,%f,magne_Yaw,%f\r\n",ang.Yaw,magn_yaw);
-	
+	//printf("%f %f %f\r\n",ang.Pitch,ang.Roll,ang.Yaw);
 	/*complementory filter*/
 	//ang.Yaw = w_mag*magn_yaw + w_imu*ang.Yaw; 
 

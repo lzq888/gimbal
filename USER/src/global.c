@@ -30,6 +30,7 @@ sensor_acc		acc;
 sensor_gyro		gyr;
 sensor_magne    mag;
 sensor_magne    mag_HMC5983;
+u16 			mag_buf[100];
 
 
 /*for ahrs*/
@@ -43,6 +44,8 @@ float 			Mq11, Mq12, Mq13, Mq21, Mq22, Mq23, Mq31, Mq32, Mq33;
 
 /*initial*/
 u8   			initial_flag=0;
+
+
 
 
 

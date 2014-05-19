@@ -1,7 +1,11 @@
 #ifndef __timer_H
 #define __timer_H
 
+
 #include "alientek.h"
+
+#define  yaw_offset 	-50
+
 void TIMER_Configuration(void);
 
 void PWMoutputA(u16 i);

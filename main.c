@@ -55,13 +55,16 @@ void delay(uint32_t delay_count)
 	USART_DMACmd(USART2, USART_DMAReq_Rx, ENABLE);
 	USART_Config( USART3, 115200);     //for gps
 	USART_DMACmd(USART3, USART_DMAReq_Rx, ENABLE);
-	
 
+	//SPI_I2S_DMACmd(SPI2, SPI_I2S_DMAReq_Rx, ENABLE);
+	joystick.Remote_on_off = 1;
+	joystick.Remote_PWM_Pitch = 2000;
+	joystick.Remote_PWM_Yaw   = 2000;
 	initial_flag = 1;
 	while(1)
 	{	
 			
-		body_aimming_angle();
+		
 		
 		//get_gps_data();
 		//printf("magne_Yaw,%f\r\n",ang.Yaw);

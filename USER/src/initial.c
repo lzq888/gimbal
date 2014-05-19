@@ -16,13 +16,14 @@ void Initial_MCU(void)
    	/*DMA Configuration*/
 	DMA1_Channel3_Configuration();
 	DMA1_Channel6_Configuration();
+	//DMA1_Channel4_Configuration();
 
 	MPU6050_I2C_Init();
 	MPU6050_Initialize();
 	
 	SPI2_Init();
 	initial_HMC5983();
-
+	
 
 	TIMER_Configuration();
 
