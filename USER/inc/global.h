@@ -1,6 +1,10 @@
 #ifndef __global_H
 #define __global_H
 #include "alientek.h"
+//#include "config.h"/
+#include "ff.h"
+
+
 
 typedef struct {
 	float 		x;
@@ -99,6 +103,16 @@ extern  float 			Mq11, Mq12, Mq13, Mq21, Mq22, Mq23, Mq31, Mq32, Mq33;
 
 /*initial*/
 extern  u8   			initial_flag;
+
+/*sdcard*/
+//FatFs
+extern  FATFS fs; 		// Work area (file system object) for logical drive
+extern  FIL fsrc, fdst; // file objects
+extern  FRESULT res; 	// FatFs function common result code
+extern  UINT br, bw; 	// File R/W count
+extern  DIR dir;
+extern  FILINFO fileInfo;
+extern  const char filedir[];
 
 
 

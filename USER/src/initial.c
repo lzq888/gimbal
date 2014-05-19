@@ -32,7 +32,7 @@ void Initial_MCU(void)
     EXTI_Configuration();
 	NVIC_Configuration();
 
-	
+	SPI_Flash_Init();
 
 
 }

@@ -17,7 +17,12 @@ u16     timming_flag=0;
 u16		checksum_flag=0;
 u8      difference_count=0;
 
-
+void joystick_initial()
+{
+	joystick.Remote_on_off = 1;
+	joystick.Remote_PWM_Pitch = 2000;
+	joystick.Remote_PWM_Yaw   = 2000;
+}
 void get_joystck_command(u8 data)
 {
 

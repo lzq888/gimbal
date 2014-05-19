@@ -32,6 +32,8 @@
 #include "aimming.h"
 #include "spi.h"
 #include "HMC5983.h"
+#include "integer.h"
+#include "ff.h"
 
 
 

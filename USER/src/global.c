@@ -1,7 +1,8 @@
 #include "global.h"
 #include <stdlib.h>
 #include <string.h>
- 
+#include "config.h"
+
 /*joystick data*/
 u16 			Mean_filter_output[4]={0,0,0,0};
 u16  			ADC1_Buf[20][4];
@@ -44,6 +45,17 @@ float 			Mq11, Mq12, Mq13, Mq21, Mq22, Mq23, Mq31, Mq32, Mq33;
 
 /*initial*/
 u8   			initial_flag=0;
+
+
+/*SDcard*/
+//FatFs
+FATFS fs; 		// Work area (file system object) for logical drive
+FIL fsrc, fdst; // file objects
+FRESULT res; 	// FatFs function common result code
+UINT br, bw; 	// File R/W count
+DIR dir;
+FILINFO fileInfo;
+const char filedir[]="0:/";
 
 
 

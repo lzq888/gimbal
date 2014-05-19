@@ -6,6 +6,9 @@ u16 	pwmvalue_b = 1450;
 u16 	pwmvalue_c;
 u16 	pwmvalue_d;
 
+u32 	SYS_TIME = 0; //100ms as the unit
+u32 	Int_Count = 0;//進入中斷次數
+u16 	Count = 0;//看幾次中斷後要記錄
 
 void TIMER_Configuration(void)
 {
@@ -47,7 +50,7 @@ void TIMER_Configuration(void)
 
 	/*TIMER2 */	
 	TIM_TimeBaseStructure.TIM_Period =99999;			  				//high voltage portion(between 0-period)
-  	TIM_TimeBaseStructure.TIM_Prescaler = 719;		
+  	TIM_TimeBaseStructure.TIM_Prescaler = 71;		
   	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
   	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
@@ -55,7 +58,7 @@ void TIMER_Configuration(void)
 	TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
 		   			
 	
-	/*72MHz/((99999+1)*(719+1))=1Hz*/																																																							
+	/*72MHz/((99999+1)*(71+1))=10Hz*/																																																							
 }
 
 void PWMoutputA(u16 i) 													
@@ -99,9 +102,19 @@ void PWMoutputD(u16 n)
 	TIM_OC1Init(TIM3, &TIM_OCInitStructure);         //TIM_OC3(channel~¬dªí
 	
 }
-/*1hz*/
+
+/*10hz*/
 void TIM2_IRQHandler(void)
 {
+	char pitch_str[30] = "";
+	char roll_str[30] = "";
+	char yaw_str[30] = "";
+	char x_str[30] = "";
+	char y_str[30] = "";
+	char z_str[30] = "";
+	char body_pitch_str[30] = "";
+	char body_yaw_str[30] = "";
+
 	if(TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET) 
 	{			  			
 	  	if(initial_flag==1)	
@@ -121,7 +134,39 @@ void TIM2_IRQHandler(void)
 			//printf("yaw,%f,pitch,%f\r\n",global_yaw,global_pitch);
 			//printf("yaw,%f,pitch,%f\r\n",global_yaw,global_pitch);
 		
-			printf("%f %f %f %f %f %f %f %f \r\n",ang.Pitch,ang.Roll,ang.Yaw,gps.x,gps.y,gps.z,body_pitch,body_yaw);
+			//printf("%f %f %f %f %f %f %f %f \r\n",ang.Pitch,ang.Roll,ang.Yaw,gps.x,gps.y,gps.z,body_pitch,body_yaw);		
+	 		
+	 		printf("%f %d %d %d\r\n",ang.Yaw,pwmvalue_a,pwmvalue_b,joystick.Remote_on_off);
+
+	 		SYS_TIME = SYS_TIME+1; //系統運行時間
+			//紀錄溫度
+			if(Count>=9)
+			{
+				Count = 0;
+				sprintf(pitch_str,"%f",ang.Pitch);
+				sprintf(roll_str,"%f",ang.Roll);
+				sprintf(yaw_str,"%f",ang.Yaw);
+				sprintf(x_str,"%f",gps.x);
+				sprintf(y_str,"%f",gps.y);
+				sprintf(z_str,"%f",gps.z);
+				sprintf(body_pitch_str,"%f",body_pitch);
+				sprintf(body_yaw_str,"%f",body_yaw);
+
+				f_printf (&fsrc,"%s %s %s %s %s %s %s %s %d\r\n",pitch_str,roll_str,yaw_str,x_str,y_str,z_str,body_pitch_str,body_yaw_str,SYS_TIME);
+			}
+			else
+			{	
+				Count++;
+			}
+			if(Int_Count>500)
+			{
+				//同步資料儲存
+		    	f_sync(&fsrc);
+				Int_Count = 0;
+			}
+			else
+			{Int_Count++;}
+
 		}
 
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
@@ -236,7 +281,7 @@ void TIM3_IRQHandler(void)
 
 			}
 
-			printf("PWM_P,%d,PWM_Y,%d\r\n",pwmvalue_a, pwmvalue_b);
+			//printf("PWM_P,%d,PWM_Y,%d\r\n",pwmvalue_a, pwmvalue_b);
 	
 		}
 		
