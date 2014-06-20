@@ -9,6 +9,8 @@
 /*low pass filter*/
 #define tau 0.01f
 #define dt  0.01f
+
+#define declination  3.36
  
 float 		last_GyrZ;
 EulerAngle 	last_ang;
@@ -118,11 +120,11 @@ void ahrs_update()
 	klpf = dt/(tau+dt);
 	ang.Pitch = last_ang.Pitch + klpf * (ang.Pitch - last_ang.Pitch);
 	ang.Roll  = last_ang.Roll  + klpf * (ang.Roll  - last_ang.Roll );
-	ang.Yaw   = last_ang.Yaw   + klpf * (ang.Yaw   - last_ang.Yaw  );
+	//ang.Yaw   = last_ang.Yaw   + klpf * (ang.Yaw   - last_ang.Yaw  );
 
 	last_ang.Pitch = ang.Pitch;
 	last_ang.Roll  = ang.Roll;
-	last_ang.Yaw   = ang.Yaw;
+	//last_ang.Yaw   = ang.Yaw;
 
 	/*compass yaw*/
 	//magn_x = ((mag.x - mag.EllipseX0) * arm_cos_f32(mag.EllipseSita) - (mag.y - mag.EllipseY0) * arm_sin_f32(mag.EllipseSita)) / mag.EllipseA;
@@ -136,7 +138,7 @@ void ahrs_update()
 	/*mag_yaw_correction*/
 	magn_x = magn_x * arm_cos_f32(ang.Pitch) + magn_y * arm_sin_f32(ang.Pitch) * arm_sin_f32(ang.Roll) - magn_z * arm_cos_f32(ang.Roll) * arm_sin_f32(ang.Pitch);
 	magn_y = magn_y * arm_cos_f32(ang.Roll) + magn_z * arm_sin_f32(ang.Roll);
-	magn_yaw = atan2f(magn_x, magn_y);
+	magn_yaw = atan2f(magn_x, magn_y) + toRad(declination);
 /*	
 	ang.Pitch = (ang.Pitch);
 	ang.Roll  = (ang.Roll);

@@ -10,12 +10,14 @@ gps_flags 		gga_flags;
 
 gps_buffers 	gga_buffer;
 gps_data        gga;
+sensor_gps		last_gps;
 u16    			word_count=0;
+u16    			gps_start=0;
 
-
-char 			  target_lad[10] = "2259.72778";
-char              target_lon[10] = "12013.3505";
-char              target_height[10] = "36";
+/*toilet*/
+char 			target_lad[10] = "2245.30712";
+char            target_lon[10] = "12037.3046";
+char            target_height[10] = "84";
 
 /*moving point*/
 float 			x=0;
@@ -262,14 +264,33 @@ void get_gps_data(u8 data)
 					gps.x=x;
 					gps.y=y;
 					gps.z=z;
+/*
+					if(gps.z > 0 && gps_start==0)
+					{
+						gps_start = 1;
+					}
 
-					//printf("x : %f\r\n",gps.x);
-					//printf("y : %f\r\n",gps.y);
-					//printf("z : %f\r\n",gps.z);
-					//printf("latitude : %f\r\n",gga.latitude_value);
-					//printf("longutitude : %f\r\n",gga.longtitude_value);
-					//printf("height : %f\r\n",gga.height_value);
-					
+					if(gps_start==1)
+					{
+						if(abs(gps.x - last_gps.x) > 100 || abs(gps.y - last_gps.y) > 100 || abs(gps.z - last_gps.z) > 100)
+						{
+							gps.x = last_gps.x;
+							gps.y = last_gps.y;
+							gps.z = last_gps.z;
+						}
+						last_gps.x = gps.x;
+						last_gps.y = gps.y;
+						last_gps.z = gps.z;
+					}
+*/					
+/*
+					printf("x : %f\r\n",gps.x);
+					printf("y : %f\r\n",gps.y);
+					printf("z : %f\r\n",gps.z);
+					printf("latitude : %f\r\n",gga.latitude_value);
+					printf("longutitude : %f\r\n",gga.longtitude_value);
+					printf("height : %f\r\n",gga.height_value);
+*/					
 					
 				}
 				

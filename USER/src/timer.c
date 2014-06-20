@@ -138,10 +138,10 @@ void TIM2_IRQHandler(void)
 	 		
 	 		printf("%f %d %d %d\r\n",ang.Yaw,pwmvalue_a,pwmvalue_b,joystick.Remote_on_off);
 
-	 		SYS_TIME = SYS_TIME+1; //系統運行時間
 			//紀錄溫度
 			if(Count>=9)
 			{
+				SYS_TIME = SYS_TIME+1; //系統運行時間(s)
 				Count = 0;
 				sprintf(pitch_str,"%f",ang.Pitch);
 				sprintf(roll_str,"%f",ang.Roll);
