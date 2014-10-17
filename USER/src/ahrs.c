@@ -6,14 +6,16 @@
 /*complementory filter*/
 #define w_mag 0.5f
 #define w_imu 0.5f//0.02f
+
 /*low pass filter*/
+/*
 #define tau 0.01f
 #define dt  0.01f
-
+*/
 #define declination  3.36
  
 float 		last_GyrZ;
-EulerAngle 	last_ang;
+//EulerAngle 	last_ang;
 
 void AHRS_Init(Quaternion *pNumQ, EulerAngle *pAngE)
 {
@@ -51,7 +53,7 @@ void ahrs_update()
 	static float AngZ_Temp = 0.0f;
 	static float exInt = 0.0f, eyInt = 0.0f, ezInt = 0.0f;
 
-	float 	klpf = 0;
+	//float 	klpf = 0;
 	/*ACC,GYRO altitude*/
 
 	/*normalize acc value*/
@@ -116,7 +118,7 @@ void ahrs_update()
 	Quaternion_ToAngE(&qua, &ang);
 
 	/*low pass filter*/
-	
+/*	
 	klpf = dt/(tau+dt);
 	ang.Pitch = last_ang.Pitch + klpf * (ang.Pitch - last_ang.Pitch);
 	ang.Roll  = last_ang.Roll  + klpf * (ang.Roll  - last_ang.Roll );

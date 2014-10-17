@@ -38,6 +38,7 @@ void delay(uint32_t delay_count)
 {
 	while (delay_count) delay_count--;
 }
+
 	
  int main(void)
 {

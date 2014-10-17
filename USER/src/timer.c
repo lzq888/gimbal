@@ -1,6 +1,12 @@
 
 #include "config.h"
 
+#define tau 0.1f
+#define dt  0.01f
+
+sensor_acc  last_acc;
+sensor_gyro last_gyr;
+
 u16 	pwmvalue_a = 1000;
 u16 	pwmvalue_b = 1450;	
 u16 	pwmvalue_c;
@@ -121,7 +127,7 @@ void TIM2_IRQHandler(void)
 		{
 			//printf("acc_x,%f,acc_y,%f,acc_z,%f,gyr_x,%f,gyr_y,%f,gyr_z,%f\r\n",
 			//acc.x,acc.y,acc.z,gyr.x,gyr.y,gyr.z);
-			//printf("%f %f %f %f %f %f %f %f %f\r\n",acc.x,acc.y,acc.z,gyr.x,gyr.y,gyr.z,ang.Pitch,ang.Roll,ang.Yaw);			
+			printf("%f %f %f %f %f %f %f %f %f\r\n",acc.x,acc.y,acc.z,gyr.x,gyr.y,gyr.z,ang.Pitch,ang.Roll,ang.Yaw);			
 			//printf("1,%f,2,%f,3,%f,4,%f,5,%f\r\n",mag.EllipseSita,mag.EllipseX0,mag.EllipseY0,mag.EllipseA,mag.EllipseB);						
 			//printf("%f  %f  %f\r\n",mag_HMC5983.x, mag_HMC5983.y, mag_HMC5983.z);
 			//printf("magne_Yaw,%f\r\n",ang.Yaw);
@@ -136,9 +142,11 @@ void TIM2_IRQHandler(void)
 		
 			//printf("%f %f %f %f %f %f %f %f \r\n",ang.Pitch,ang.Roll,ang.Yaw,gps.x,gps.y,gps.z,body_pitch,body_yaw);		
 	 		
-	 		printf("%f %d %d %d\r\n",ang.Yaw,pwmvalue_a,pwmvalue_b,joystick.Remote_on_off);
+	 		//printf("%f %d %d %d\r\n",ang.Yaw,pwmvalue_a,pwmvalue_b,joystick.Remote_on_off);
+	 		
 
 			//紀錄溫度
+			
 			if(Count>=9)
 			{
 				SYS_TIME = SYS_TIME+1; //系統運行時間(s)
@@ -167,6 +175,10 @@ void TIM2_IRQHandler(void)
 			else
 			{Int_Count++;}
 
+
+			//gpio_toggle(GPIOA, GPIO_Pin_1);
+			
+
 		}
 
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
@@ -179,6 +191,7 @@ void TIM3_IRQHandler(void)
 	{
 		
 		/*pitch*/
+
 		if(initial_flag==1)	
 		{
 
@@ -317,11 +330,39 @@ void TIM5_IRQHandler(void)
 			}
 			mpu_9150_data();
 			HMC5983_DATA();
+
+			/*low pass filter*/
+			float 	klpf = 0;
+	
+			klpf = dt/(tau+dt);
+			acc.x = last_acc.x + klpf * (acc.x - last_acc.x);
+			acc.y = last_acc.y + klpf * (acc.y - last_acc.y);
+			acc.z = last_acc.z + klpf * (acc.z - last_acc.z);
+			//ang.Yaw   = last_ang.Yaw   + klpf * (ang.Yaw   - last_ang.Yaw  );
+			gyr.x = last_gyr.x + klpf * (gyr.x - last_gyr.x);
+			gyr.y = last_gyr.y + klpf * (gyr.y - last_gyr.y);
+			gyr.z = last_gyr.z + klpf * (gyr.z - last_gyr.z);
+
+			last_acc.x = acc.x;
+			last_acc.y = acc.y;
+			last_acc.z = acc.z;
+
+			last_gyr.x = gyr.x;
+			last_gyr.y = gyr.y;
+			last_gyr.z = gyr.z;
+
+			//last_ang.Yaw   = ang.Yaw;
+
+
+
+
 			ahrs_update();
+			/*
 			for(int i=0;i<100;i++)
 			{
 				get_joystck_command(joystick_buffer[i]);
 			}
+			*/
 		}	
 		
 		TIM_ClearITPendingBit(TIM5, TIM_IT_Update);
