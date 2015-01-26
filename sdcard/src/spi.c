@@ -96,20 +96,20 @@ void SPI2_SetSpeed(u8 SpeedSet)
 u8 SPIx_ReadWriteByte(u8 TxData)
 {		
 	u8 retry=0;				 
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET) //檢查指定的SPI標誌位元設置與否:發送緩存空標誌位元
+	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET) 
 		{
 			retry++;
 			if(retry>200)return 0;
 		}			  
 
-	SPI_I2S_SendData(SPI1, TxData); //通過外設SPIx發送一個資料
+	SPI_I2S_SendData(SPI1, TxData);
 	retry=0;
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET); //檢查指定的SPI標誌位元設置與否:接受緩存非空標誌位元
+	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET); 
 		{
 			retry++;
 			if(retry>200)return 0;
 		}	  						    
-	return SPI_I2S_ReceiveData(SPI1); //返回通過SPIx最近接收的資料
+	return SPI_I2S_ReceiveData(SPI1); 
 }
 
 

@@ -60,7 +60,7 @@ void DMA1_Channel4_Configuration(void)
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
   /*Configure DMA1 Channel1*/
   DMA_DeInit(DMA1_Channel4);
-  DMA_InitStructure.DMA_PeripheralBaseAddr = (u32)&(SPI2->DR);
+  DMA_InitStructure.DMA_PeripheralBaseAddr = (u32)&(USART1->DR);
   DMA_InitStructure.DMA_MemoryBaseAddr = (u32)mag_buf;
   DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;
   DMA_InitStructure.DMA_BufferSize = 100;
