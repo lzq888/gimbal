@@ -220,5 +220,23 @@ void USART3_IRQHandler(void)
 }
 */
 
+void send_byte(uint8_t b)
+{
+	/* Send one byte */
+	USART_SendData(USART1, b);
+
+	/* Loop until USART2 DR register is empty */
+	while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
+}
+
+void send_string(uint8_t *str)
+{
+	while ((*str) != '\0') {
+
+		send_byte(*str);
+		str++;
+	}
+}
+
 
 

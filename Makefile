@@ -89,7 +89,7 @@ SRC+=$(ST_LIB)/src/misc.c \
 #MPU6050 Lib
 SRC+=./MPU6050_lib/MPU6050.c
 #Major programs
-SRC+=./main.c 
+SRC+=./USER/src/main.c 
 #programs added
 SRC+=./USER/src/adc.c \
      ./USER/src/clock.c \
@@ -112,7 +112,6 @@ SRC+=./USER/src/adc.c \
      ./USER/src/HMC5983.c \
      ./adding/src/algorithm_moveAve.c \
      ./adding/src/algorithm_quaternion.c \
-     ./sdcard/src/flash.c \
      ./sdcard/src/spi.c \
      ./sdcard/src/sd.c 
 
